@@ -3,13 +3,15 @@ import 'package:get/get.dart';
 import 'package:pomodoro_countdown/controllers/countdown_controller.dart';
 import 'package:pomodoro_countdown/controllers/file_controller.dart';
 import 'package:pomodoro_countdown/controllers/settings_controller.dart';
+import 'package:pomodoro_countdown/view/items/pomodoro_drawer.dart';
 import 'package:pomodoro_countdown/view/screens/main_screen.dart';
 
 void main() {
+  final SettingsController _settingsController = Get.put(SettingsController());
   final CountDownController _countDownController =
       Get.put(CountDownController());
   final FileController _fileController = Get.put(FileController());
-  final SettingsController _settingsController = Get.put(SettingsController());
+
   runApp(MyApp());
 }
 
@@ -44,6 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
+      drawer: PomodoroDrawer(),
       body: MainScreen(),
     );
   }
