@@ -5,6 +5,7 @@ import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pausable_timer/pausable_timer.dart';
+import 'package:pomodoro_countdown/controllers/settings_controller.dart';
 
 import '../others/logger.dart';
 
@@ -19,13 +20,12 @@ enum typeRound {
 }
 
 class CountDownController extends GetxController {
+  final SettingsController _settingsController = Get.find();
+
   stateCountdown stateCount = stateCountdown.stop;
   RxString startPausedText = RxString('start'.tr);
   RxString stopText = RxString('stop'.tr);
   RxInt rounds = RxInt(3);
-  RxInt secondsWork = RxInt(1 * 10);
-  RxInt secondsBreak = RxInt(1 * 6);
-  RxInt secondsBreakAfterRound = RxInt(2 * 6);
   late AnimationController controller;
   RxInt currentSecondsRound = RxInt(0);
   typeRound currentTypeRound = typeRound.working;
@@ -41,10 +41,10 @@ class CountDownController extends GetxController {
   createAnimationController(TickerProvider ticker) {
     tickerProvider = ticker;
     currentSecondsRound.value = currentTypeRound == typeRound.working
-        ? secondsWork.value
+        ? _settingsController.secondsWork.value
         : currentRound.value < rounds.value
-            ? secondsBreak.value
-            : secondsBreakAfterRound.value;
+            ? _settingsController.secondsBreak.value
+            : _settingsController.secondsBreakAfterRound.value;
     restartTimers();
     controller = AnimationController(
       vsync: tickerProvider,
@@ -119,11 +119,12 @@ class CountDownController extends GetxController {
         : typeRound.working;
     if (currentRound.value == rounds.value &&
         currentTypeRound == typeRound.breaking) {
-      currentSecondsRound.value = secondsBreakAfterRound.value;
+      currentSecondsRound.value =
+          _settingsController.secondsBreakAfterRound.value;
     } else {
       currentSecondsRound.value = currentTypeRound == typeRound.working
-          ? secondsWork.value
-          : secondsBreak.value;
+          ? _settingsController.secondsWork.value
+          : _settingsController.secondsBreak.value;
     }
 
     restartTimers();
@@ -139,12 +140,12 @@ class CountDownController extends GetxController {
   int nextSecond() {
     if (currentTypeRound == typeRound.working) {
       if (currentRound == rounds) {
-        return secondsBreakAfterRound.value;
+        return _settingsController.secondsBreakAfterRound.value;
       } else {
-        return secondsBreak.value;
+        return _settingsController.secondsBreak.value;
       }
     } else {
-      return secondsWork.value;
+      return _settingsController.secondsWork.value;
     }
   }
 

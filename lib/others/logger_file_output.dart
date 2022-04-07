@@ -15,9 +15,8 @@ class LoggerFileOutput extends LogOutput {
   }
 
   Future<String> get _getDirPath async {
-    final dirExternal = await getExternalStorageDirectory();
     final dir = await getApplicationDocumentsDirectory();
-    return dirExternal?.path ?? dir.path;
+    return dir.path;
   }
 
   Future<void> _createFile() async {
