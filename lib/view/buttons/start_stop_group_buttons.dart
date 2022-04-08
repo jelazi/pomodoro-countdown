@@ -16,6 +16,8 @@ class _StartStopGroupButtonState extends State<StartStopGroupButton> {
 
   ButtonStyle styleBtn = ButtonStyle(
     backgroundColor: MaterialStateProperty.all(Colors.red),
+    shape: MaterialStateProperty.all(CircleBorder()),
+    padding: MaterialStateProperty.all(EdgeInsets.all(25)),
   );
 
   @override

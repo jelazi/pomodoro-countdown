@@ -19,6 +19,11 @@ enum typeRound {
   working,
 }
 
+enum stateRound {
+  undone,
+  done,
+}
+
 class CountDownController extends GetxController {
   final SettingsController _settingsController = Get.find();
 
@@ -37,6 +42,7 @@ class CountDownController extends GetxController {
   late CustomTimerPainter painter;
   RxString timerString = RxString('');
   late Timer secondTimer;
+  List<Rx<stateRound>> listRounds = [];
 
   createAnimationController(TickerProvider ticker) {
     tickerProvider = ticker;
@@ -56,6 +62,8 @@ class CountDownController extends GetxController {
     );
     timerString.value =
         '${currentDuration.inMinutes}:${(currentDuration.inSeconds % 60).toString().padLeft(2, '0')}';
+    listRounds =
+        List.generate(rounds.value + 1, (index) => Rx(stateRound.undone));
   }
 
   restartTimers() {
@@ -104,15 +112,21 @@ class CountDownController extends GetxController {
   }
 
   _endRound() {
-    print('round is finished');
+    logger.d('round is finished');
     print(currentSecondsRound);
     stateCount = stateCountdown.stop;
     _changedTextStartPaused(stateCount);
     if (currentTypeRound == typeRound.breaking) {
       currentRound.value++;
+
       if (currentRound.value > rounds.value) {
         currentRound.value = 0;
+        listRounds.forEach((element) {
+          element.value = stateRound.undone;
+        });
       }
+    } else {
+      listRounds[currentRound.value].value = stateRound.done;
     }
     currentTypeRound = currentTypeRound == typeRound.working
         ? typeRound.breaking
@@ -150,6 +164,9 @@ class CountDownController extends GetxController {
   }
 
   stop() {
+    if (stateCount != stateCountdown.play) {
+      return;
+    }
     controller.value = 1;
     timer.cancel();
     _endRound();
@@ -168,7 +185,7 @@ class CustomTimerPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..strokeWidth = 10.0
+      ..strokeWidth = 20.0
       ..strokeCap = StrokeCap.butt
       ..style = PaintingStyle.stroke;
 
