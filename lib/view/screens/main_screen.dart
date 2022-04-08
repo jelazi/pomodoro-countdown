@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pomodoro_countdown/controllers/countdown_controller.dart';
 import 'package:pomodoro_countdown/view/buttons/start_stop_group_buttons.dart';
+import 'package:pomodoro_countdown/view/items/tomato_icon.dart';
 
 class MainScreen extends StatefulWidget {
   MainScreen();
@@ -29,19 +30,21 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
             animation: _countDownController.controller,
             builder: (context, child) {
               return Stack(
-                children: <Widget>[
+                children: [
                   Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Expanded(
+                          flex: 10,
                           child: Padding(
-                            padding: const EdgeInsets.all(20.0),
+                            padding: const EdgeInsets.all(10.0),
                             child: Obx(
                               () => Text(
                                 "Current Round: ".tr +
-                                    _countDownController.currentRound.value
+                                    (_countDownController.currentRound.value +
+                                            1)
                                         .toString(),
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
@@ -53,42 +56,62 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                           ),
                         ),
                         Expanded(
-                          child: Align(
-                            alignment: FractionalOffset.center,
-                            child: AspectRatio(
-                              aspectRatio: 1.0,
-                              child: Stack(
-                                children: <Widget>[
-                                  Positioned.fill(
-                                    child: CustomPaint(
-                                        painter: _countDownController.painter),
-                                  ),
-                                  Align(
-                                    alignment: FractionalOffset.center,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: <Widget>[
-                                        Obx(
-                                          () => Text(
-                                            _countDownController
-                                                .timerString.value,
-                                            style: TextStyle(
-                                                fontSize: 40.0,
-                                                color: Colors.white),
-                                          ),
-                                        ),
-                                      ],
+                          flex: 15,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: _countDownController.listRounds
+                                  .map(
+                                    (e) => TomatoIcon(e),
+                                  )
+                                  .toList(),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 50,
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Align(
+                              alignment: FractionalOffset.center,
+                              child: AspectRatio(
+                                aspectRatio: 1.0,
+                                child: Stack(
+                                  children: <Widget>[
+                                    Positioned.fill(
+                                      child: CustomPaint(
+                                          painter:
+                                              _countDownController.painter),
                                     ),
-                                  ),
-                                ],
+                                    Align(
+                                      alignment: FractionalOffset.center,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          Obx(
+                                            () => Text(
+                                              _countDownController
+                                                  .timerString.value,
+                                              style: TextStyle(
+                                                  fontSize: 40.0,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ),
                         Expanded(
+                          flex: 15,
                           child: Padding(
                             padding: const EdgeInsets.all(20.0),
                             child: Obx(
@@ -105,6 +128,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                           ),
                         ),
                         Expanded(
+                          flex: 20,
                           child: StartStopGroupButton(),
                         ),
                       ],
