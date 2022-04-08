@@ -1,0 +1,2 @@
+TODO: notification in background
+TODO: only portrait mode

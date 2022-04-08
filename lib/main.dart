@@ -3,16 +3,18 @@ import 'package:get/get.dart';
 import 'package:pomodoro_countdown/controllers/countdown_controller.dart';
 import 'package:pomodoro_countdown/controllers/file_controller.dart';
 import 'package:pomodoro_countdown/controllers/projects_controller.dart';
+import 'package:pomodoro_countdown/controllers/ring_controlller.dart';
 import 'package:pomodoro_countdown/controllers/settings_controller.dart';
 import 'package:pomodoro_countdown/view/items/pomodoro_drawer.dart';
 import 'package:pomodoro_countdown/view/screens/main_screen.dart';
 
 void main() {
+  final FileController _fileController = Get.put(FileController());
   final SettingsController _settingsController = Get.put(SettingsController());
+  final RingController _ringController = Get.put(RingController());
   final CountDownController _countDownController =
       Get.put(CountDownController());
   final ProjectsController _projectControlller = Get.put(ProjectsController());
-  final FileController _fileController = Get.put(FileController());
 
   runApp(MyApp());
 }

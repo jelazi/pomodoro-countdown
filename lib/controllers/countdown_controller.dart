@@ -5,6 +5,7 @@ import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pausable_timer/pausable_timer.dart';
+import 'package:pomodoro_countdown/controllers/ring_controlller.dart';
 import 'package:pomodoro_countdown/controllers/settings_controller.dart';
 
 import '../others/logger.dart';
@@ -26,6 +27,7 @@ enum stateRound {
 
 class CountDownController extends GetxController {
   final SettingsController _settingsController = Get.find();
+  final RingController _ringController = Get.find();
 
   stateCountdown stateCount = stateCountdown.stop;
   RxString startPausedText = RxString('start'.tr);
@@ -43,6 +45,7 @@ class CountDownController extends GetxController {
   RxString timerString = RxString('');
   late Timer secondTimer;
   List<Rx<stateRound>> listRounds = [];
+  bool isFromPause = false;
 
   createAnimationController(TickerProvider ticker) {
     tickerProvider = ticker;
@@ -89,6 +92,13 @@ class CountDownController extends GetxController {
   startPaused() {
     if (stateCount == stateCountdown.pause ||
         stateCount == stateCountdown.stop) {
+      if (!isFromPause) {
+        if (currentTypeRound == typeRound.working) {
+          _ringController.playStartWorking();
+        } else {
+          _ringController.playStartBreaking();
+        }
+      }
       stateCount = stateCountdown.play;
       currentDuration = Duration(seconds: currentSecondsRound.value);
       controller.reverse(
@@ -102,6 +112,7 @@ class CountDownController extends GetxController {
 
       timer.start();
     } else if (stateCount == stateCountdown.play) {
+      isFromPause = true;
       stateCount = stateCountdown.pause;
       timer.pause();
       secondTimer.cancel();
@@ -112,6 +123,12 @@ class CountDownController extends GetxController {
   }
 
   _endRound() {
+    isFromPause = false;
+    if (currentTypeRound == typeRound.working) {
+      _ringController.playStopWorking();
+    } else {
+      _ringController.playStopBreaking();
+    }
     logger.d('round is finished');
     print(currentSecondsRound);
     stateCount = stateCountdown.stop;
