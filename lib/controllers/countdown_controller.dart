@@ -29,7 +29,7 @@ class CountDownController extends GetxController {
   final SettingsController _settingsController = Get.find();
   final RingController _ringController = Get.find();
 
-  stateCountdown stateCount = stateCountdown.stop;
+  Rx<stateCountdown> stateCount = Rx(stateCountdown.stop);
   RxString startPausedText = RxString('start'.tr);
   RxString stopText = RxString('stop'.tr);
   RxInt rounds = RxInt(3);
@@ -99,7 +99,7 @@ class CountDownController extends GetxController {
           _ringController.playStartBreaking();
         }
       }
-      stateCount = stateCountdown.play;
+      stateCount.value = stateCountdown.play;
       currentDuration = Duration(seconds: currentSecondsRound.value);
       controller.reverse(
           from: controller.value == 0.0 ? 1.0 : controller.value);
@@ -113,13 +113,13 @@ class CountDownController extends GetxController {
       timer.start();
     } else if (stateCount == stateCountdown.play) {
       isFromPause = true;
-      stateCount = stateCountdown.pause;
+      stateCount.value = stateCountdown.pause;
       timer.pause();
       secondTimer.cancel();
       controller.stop();
       currentSecondsRound.value = currentDuration.inSeconds;
     }
-    _changedTextStartPaused(stateCount);
+    _changedTextStartPaused(stateCount.value);
   }
 
   _endRound() {
@@ -131,8 +131,8 @@ class CountDownController extends GetxController {
     }
     logger.d('round is finished');
     print(currentSecondsRound);
-    stateCount = stateCountdown.stop;
-    _changedTextStartPaused(stateCount);
+    stateCount.value = stateCountdown.stop;
+    _changedTextStartPaused(stateCount.value);
     if (currentTypeRound == typeRound.breaking) {
       currentRound.value++;
 
