@@ -18,30 +18,31 @@ class _PomodoroDrawerState extends State<PomodoroDrawer> {
         padding: EdgeInsets.zero,
         children: [
           const DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.red,
+            decoration: BoxDecoration(),
+            child: Center(
+              child: SizedBox(
+                width: 100,
+                height: 100,
+                child: Image(
+                  image: AssetImage('assets/icons/tomatoDone.png'),
+                ),
+              ),
             ),
-            child: Text('Pomodoro drawer'),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextFormField(),
           ),
           ListTile(
             title: Text('openSettings'.tr),
+            leading: const Icon(Icons.settings),
             onTap: () {
               Navigator.pop(context);
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => SettingsScreen()));
-
-              // Update the state of the app.
-              // ...
             },
           ),
           ListTile(
             title: Text('sync'.tr),
+            leading: const Icon(Icons.sync),
             onTap: () {
-              // Update the state of the app.
+              // TODO:Update the state of the app.
               // ...
             },
           ),

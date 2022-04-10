@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:pomodoro_countdown/controllers/countdown_controller.dart';
 import 'package:pomodoro_countdown/controllers/settings_controller.dart';
+import 'package:pomodoro_countdown/view/dialogs_snackbars/my_snack_bar.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 import '../../others/logger.dart';
@@ -14,6 +17,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   final SettingsController _settingsController = Get.find();
+  final CountDownController _countDownController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,30 +67,34 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ],
             ),
             SettingsSection(
-              title: Text('round'.tr),
+              title: Text('rounds'.tr),
               tiles: <SettingsTile>[
                 SettingsTile.navigation(
                   leading: const Icon(Icons.repeat),
                   title: Text('numberRound'.tr),
-                  value: Text(_settingsController.rounds.value.toString()),
+                  value:
+                      Text((_settingsController.rounds.value + 1).toString()),
                   onPressed: (BuildContext context) {
                     Get.dialog(getSettingsDialogInt(
                         'roundTitle'.tr,
                         'roundHint'.tr,
-                        _settingsController.rounds.value,
+                        _settingsController.rounds.value + 1,
                         saveData,
-                        'round'));
+                        'rounds'));
                   },
                 ),
                 SettingsTile.navigation(
                   leading: Icon(Icons.work),
                   title: Text('workTime'.tr),
-                  value: Text(_settingsController.secondsWork.value.toString()),
+                  value: Text((_settingsController.secondsWork.value / 60)
+                          .truncate()
+                          .toString() +
+                      'minutes'.tr),
                   onPressed: (BuildContext context) {
                     Get.dialog(getSettingsDialogInt(
                         'workTimeTitle'.tr,
                         'workTimeHint'.tr,
-                        _settingsController.secondsWork.value,
+                        (_settingsController.secondsWork.value / 60).truncate(),
                         saveData,
                         'workTime'));
                   },
@@ -94,13 +102,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 SettingsTile.navigation(
                   leading: Icon(Icons.bed),
                   title: Text('restTime'.tr),
-                  value:
-                      Text(_settingsController.secondsBreak.value.toString()),
+                  value: Text((_settingsController.secondsBreak.value / 60)
+                          .truncate()
+                          .toString() +
+                      'minutes'.tr),
                   onPressed: (BuildContext context) {
                     Get.dialog(getSettingsDialogInt(
                         'restTimeTitle'.tr,
                         'restTimeHint'.tr,
-                        _settingsController.secondsBreak.value,
+                        (_settingsController.secondsBreak.value / 60)
+                            .truncate(),
                         saveData,
                         'restTime'));
                   },
@@ -108,13 +119,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 SettingsTile.navigation(
                   leading: Icon(Icons.bedroom_child),
                   title: Text('longRestTime'.tr),
-                  value: Text(_settingsController.secondsBreakAfterRound.value
-                      .toString()),
+                  value: Text(
+                      (_settingsController.secondsBreakAfterRound.value / 60)
+                              .truncate()
+                              .toString() +
+                          'minutes'.tr),
                   onPressed: (BuildContext context) {
                     Get.dialog(getSettingsDialogInt(
                         'longRestTimeTitle'.tr,
                         'longRestTimeHint'.tr,
-                        _settingsController.secondsBreakAfterRound.value,
+                        (_settingsController.secondsBreakAfterRound.value / 60)
+                            .truncate(),
                         saveData,
                         'longRestTime'));
                   },
@@ -128,6 +143,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 title: Text('warningPause'.tr),
                 onToggle: (value) {
                   _settingsController.warningPause.value = value;
+                  _settingsController.saveSettingsData();
                 },
               ),
               SettingsTile.switchTile(
@@ -137,6 +153,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     _settingsController.warningTimeEndingAfterWork.value,
                 onToggle: (value) {
                   _settingsController.warningTimeEndingAfterWork.value = value;
+                  _settingsController.saveSettingsData();
                 },
               ),
               SettingsTile.switchTile(
@@ -146,13 +163,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     _settingsController.warningTimeEndingAfterBreak.value,
                 onToggle: (value) {
                   _settingsController.warningTimeEndingAfterBreak.value = value;
+                  _settingsController.saveSettingsData();
                 },
               ),
               SettingsTile.navigation(
                 leading: Icon(Icons.bedroom_child),
                 title: Text('durationPeriodPauseWarning'.tr),
                 value: Text(_settingsController.durationPeriodPauseWarning.value
-                    .toString()),
+                        .toString() +
+                    'seconds'.tr),
                 onPressed: (BuildContext context) {
                   Get.dialog(getSettingsDialogInt(
                       'durationPeriodPauseWarningTitle'.tr,
@@ -166,8 +185,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 leading: Icon(Icons.bedroom_child),
                 title: Text('durationPeriodFinishedWarning'.tr),
                 value: Text(_settingsController
-                    .durationPeriodFinishedWarning.value
-                    .toString()),
+                        .durationPeriodFinishedWarning.value
+                        .toString() +
+                    'seconds'.tr),
                 onPressed: (BuildContext context) {
                   Get.dialog(getSettingsDialogInt(
                       'durationPeriodFinishedWarningTitle'.tr,
@@ -187,6 +207,63 @@ class _SettingsScreenState extends State<SettingsScreen> {
   saveData(var newData, String nameData) {
     logger.d('newData: $newData');
     logger.d('namedata: $nameData');
+    switch (nameData) {
+      case 'rounds':
+        {
+          _settingsController.rounds.value = (newData - 1);
+          _countDownController.resetValues();
+          break;
+        }
+      case 'workTime':
+        {
+          _settingsController.secondsWork.value = (newData * 60);
+          _countDownController.resetValues();
+          break;
+        }
+      case 'restTime':
+        {
+          _settingsController.secondsBreak.value = (newData * 60);
+          _countDownController.resetValues();
+          break;
+        }
+      case 'longRestTime':
+        {
+          _settingsController.secondsBreakAfterRound.value = (newData * 60);
+          _countDownController.resetValues();
+          break;
+        }
+      case 'nameOwner':
+        {
+          _settingsController.nameOwner.value = newData;
+          break;
+        }
+      case 'passwordOwner':
+        {
+          _settingsController.passwordOwner.value = newData;
+          break;
+        }
+      case 'warningPause':
+        {
+          _settingsController.warningPause.value = newData;
+          break;
+        }
+      case 'durationPeriodPauseWarning':
+        {
+          _settingsController.durationPeriodPauseWarning.value = newData;
+          break;
+        }
+      case 'durationPeriodFinishedWarning':
+        {
+          _settingsController.durationPeriodFinishedWarning.value = newData;
+          break;
+        }
+
+      default:
+        {
+          logger.e('wrong nameString datas');
+        }
+    }
+    _settingsController.saveSettingsData();
   }
 
   getSettingsDialogString(
@@ -215,7 +292,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       actions: [
         ElevatedButton(
           onPressed: () {
-            onPress(value);
+            onPress(value, nameData);
             Navigator.of(Get.overlayContext!).pop();
           },
           child: Text('ok'.tr),
@@ -241,14 +318,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return AlertDialog(
       title: Text(titleString),
       content: TextField(
+        keyboardType:
+            const TextInputType.numberWithOptions(decimal: true, signed: true),
+        inputFormatters: <TextInputFormatter>[
+          FilteringTextInputFormatter.digitsOnly,
+        ],
         decoration: InputDecoration(
           border: const OutlineInputBorder(),
           labelText: value.toString(),
           hintText: hintText,
         ),
-        keyboardType: TextInputType.number,
         onChanged: (text) {
           setState(() {
+            if (int.tryParse(text) == null) {
+              MySnackBar.warningSnackBar('Error'.tr, 'only number'.tr);
+              return;
+            }
             value = int.parse(text);
           });
         },
@@ -256,7 +341,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       actions: [
         ElevatedButton(
           onPressed: () {
-            onPress(value);
+            onPress(value, nameData);
             Navigator.of(Get.overlayContext!).pop();
           },
           child: Text('ok'.tr),

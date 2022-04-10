@@ -33,11 +33,10 @@ class CountDownController extends GetxController {
   Rx<stateCountdown> stateCount = Rx(stateCountdown.stop);
   RxString startPausedText = RxString('start'.tr);
   RxString stopText = RxString('stop'.tr);
-  RxInt rounds = RxInt(3);
   late AnimationController controller;
-  RxInt currentSecondsRound = RxInt(0);
-  typeRound currentTypeRound = typeRound.working;
-  RxInt currentRound = RxInt(0);
+  RxInt currentRoundSeconds = RxInt(0);
+  typeRound currentRoundType = typeRound.working;
+  RxInt currentRoundNumber = RxInt(0);
   late Duration currentDuration;
   late PausableTimer timer;
   late TickerProvider tickerProvider;
@@ -47,14 +46,15 @@ class CountDownController extends GetxController {
   late Timer secondTimer;
   Timer? pauseTimer;
   Timer? finishedTimer;
-  List<Rx<stateRound>> listRounds = [];
+  RxList<Rx<stateRound>> listRounds = RxList();
   bool isFromPause = false;
 
   createAnimationController(TickerProvider ticker) {
+    currentRoundType = typeRound.working;
     tickerProvider = ticker;
-    currentSecondsRound.value = currentTypeRound == typeRound.working
+    currentRoundSeconds.value = currentRoundType == typeRound.working
         ? _settingsController.secondsWork.value
-        : currentRound.value < rounds.value
+        : currentRoundNumber.value < _settingsController.rounds.value
             ? _settingsController.secondsBreak.value
             : _settingsController.secondsBreakAfterRound.value;
     restartTimers();
@@ -68,16 +68,42 @@ class CountDownController extends GetxController {
     );
     timerString.value =
         '${currentDuration.inMinutes}:${(currentDuration.inSeconds % 60).toString().padLeft(2, '0')}';
-    listRounds =
-        List.generate(rounds.value + 1, (index) => Rx(stateRound.undone));
+    listRounds.value = List.generate(
+        _settingsController.rounds.value + 1, (index) => Rx(stateRound.undone));
+  }
+
+  resetValues() {
+    currentRoundType = typeRound.working;
+    currentRoundSeconds.value = currentRoundType == typeRound.working
+        ? _settingsController.secondsWork.value
+        : currentRoundNumber.value < _settingsController.rounds.value
+            ? _settingsController.secondsBreak.value
+            : _settingsController.secondsBreakAfterRound.value;
+    restartTimers();
+    controller = AnimationController(
+      vsync: tickerProvider,
+      duration: currentDuration,
+    );
+    painter = CustomTimerPainter(
+      animation: controller,
+      color: Colors.red,
+    );
+    timerString.value =
+        '${currentDuration.inMinutes}:${(currentDuration.inSeconds % 60).toString().padLeft(2, '0')}';
+    listRounds.value = List.generate(
+        _settingsController.rounds.value + 1, (index) => Rx(stateRound.undone));
+    pauseTimer?.cancel();
+    finishedTimer?.cancel();
   }
 
   restartTimers() {
-    logger.d('restart timers');
-    currentDuration = Duration(seconds: currentSecondsRound.value);
+    currentDuration = Duration(seconds: currentRoundSeconds.value);
     timer = PausableTimer(currentDuration, () {
       _endRound();
     });
+
+    pauseTimer?.cancel();
+    finishedTimer?.cancel();
   }
 
   _changedTextStartPaused(stateCountdown state) {
@@ -93,17 +119,17 @@ class CountDownController extends GetxController {
   }
 
   startPaused() {
-    if (stateCount == stateCountdown.pause ||
-        stateCount == stateCountdown.stop) {
+    if (stateCount.value == stateCountdown.pause ||
+        stateCount.value == stateCountdown.stop) {
       if (!isFromPause) {
-        if (currentTypeRound == typeRound.working) {
+        if (currentRoundType == typeRound.working) {
           _ringController.playStartWorking();
         } else {
           _ringController.playStartBreaking();
         }
       }
       stateCount.value = stateCountdown.play;
-      currentDuration = Duration(seconds: currentSecondsRound.value);
+      currentDuration = Duration(seconds: currentRoundSeconds.value);
       controller.reverse(
           from: controller.value == 0.0 ? 1.0 : controller.value);
       const oneDecimal = Duration(milliseconds: 100);
@@ -126,12 +152,12 @@ class CountDownController extends GetxController {
       timer.pause();
       secondTimer.cancel();
       controller.stop();
-      currentSecondsRound.value = currentDuration.inSeconds;
+      currentRoundSeconds.value = currentDuration.inSeconds;
       pauseTimer = Timer.periodic(
           Duration(
               seconds: _settingsController.durationPeriodPauseWarning.value),
           (timer) {
-        warningTimeFinished();
+        warningPause();
       });
     }
     _changedTextStartPaused(stateCount.value);
@@ -139,36 +165,36 @@ class CountDownController extends GetxController {
 
   _endRound() {
     isFromPause = false;
-    if (currentTypeRound == typeRound.working) {
+    if (currentRoundType == typeRound.working) {
       _ringController.playStopWorking();
     } else {
       _ringController.playStopBreaking();
     }
     logger.d('round is finished');
-    print(currentSecondsRound);
+    print(currentRoundSeconds);
     stateCount.value = stateCountdown.stop;
     _changedTextStartPaused(stateCount.value);
-    if (currentTypeRound == typeRound.breaking) {
-      currentRound.value++;
+    if (currentRoundType == typeRound.breaking) {
+      currentRoundNumber.value++;
 
-      if (currentRound.value > rounds.value) {
-        currentRound.value = 0;
+      if (currentRoundNumber.value > _settingsController.rounds.value) {
+        currentRoundNumber.value = 0;
         listRounds.forEach((element) {
           element.value = stateRound.undone;
         });
       }
     } else {
-      listRounds[currentRound.value].value = stateRound.done;
+      listRounds[currentRoundNumber.value].value = stateRound.done;
     }
-    currentTypeRound = currentTypeRound == typeRound.working
+    currentRoundType = currentRoundType == typeRound.working
         ? typeRound.breaking
         : typeRound.working;
-    if (currentRound.value == rounds.value &&
-        currentTypeRound == typeRound.breaking) {
-      currentSecondsRound.value =
+    if (currentRoundNumber.value == _settingsController.rounds.value &&
+        currentRoundType == typeRound.breaking) {
+      currentRoundSeconds.value =
           _settingsController.secondsBreakAfterRound.value;
     } else {
-      currentSecondsRound.value = currentTypeRound == typeRound.working
+      currentRoundSeconds.value = currentRoundType == typeRound.working
           ? _settingsController.secondsWork.value
           : _settingsController.secondsBreak.value;
     }
@@ -185,18 +211,18 @@ class CountDownController extends GetxController {
         Duration(
             seconds: _settingsController.durationPeriodFinishedWarning.value),
         (timer) {
-      warningPause();
+      warningTimeFinished();
     });
   }
 
   warningPause() {
     if (_settingsController.warningPause.value) {
-      if (currentTypeRound == typeRound.breaking) {
+      if (currentRoundType == typeRound.breaking) {
         MySnackBar.warningSnackBar(
             'Pause'.tr, 'We are waiting to continue breaking.'.tr);
         _ringController.playRingWarning();
       }
-      if (currentTypeRound == typeRound.working) {
+      if (currentRoundType == typeRound.working) {
         MySnackBar.warningSnackBar(
             'Pause'.tr, 'We are waiting to continue working.'.tr);
         _ringController.playRingWarning();
@@ -205,13 +231,13 @@ class CountDownController extends GetxController {
   }
 
   warningTimeFinished() {
-    if (currentTypeRound == typeRound.breaking &&
+    if (currentRoundType == typeRound.breaking &&
         _settingsController.warningTimeEndingAfterWork.value) {
       MySnackBar.warningSnackBar(
           'Break is finished'.tr, 'It is time for work.'.tr);
       _ringController.playRingWarning();
     }
-    if (currentTypeRound == typeRound.working &&
+    if (currentRoundType == typeRound.working &&
         _settingsController.warningTimeEndingAfterBreak.value) {
       MySnackBar.warningSnackBar(
           'Work is finished'.tr, 'It is time for rest.'.tr);
@@ -220,8 +246,8 @@ class CountDownController extends GetxController {
   }
 
   int nextSecond() {
-    if (currentTypeRound == typeRound.working) {
-      if (currentRound == rounds) {
+    if (currentRoundType == typeRound.working) {
+      if (currentRoundNumber == _settingsController.rounds) {
         return _settingsController.secondsBreakAfterRound.value;
       } else {
         return _settingsController.secondsBreak.value;

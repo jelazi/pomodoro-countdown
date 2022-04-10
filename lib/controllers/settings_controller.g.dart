@@ -28,7 +28,9 @@ SettingsController _$SettingsControllerFromJson(Map<String, dynamic> json) =>
       ..durationPeriodPauseWarning = const RxIntConverter()
           .fromJson(json['durationPeriodPauseWarning'] as int)
       ..durationPeriodFinishedWarning = const RxIntConverter()
-          .fromJson(json['durationPeriodFinishedWarning'] as int);
+          .fromJson(json['durationPeriodFinishedWarning'] as int)
+      ..nameLanguage =
+          const RxStringConverter().fromJson(json['nameLanguage'] as String);
 
 Map<String, dynamic> _$SettingsControllerToJson(SettingsController instance) =>
     <String, dynamic>{
@@ -48,4 +50,5 @@ Map<String, dynamic> _$SettingsControllerToJson(SettingsController instance) =>
           const RxIntConverter().toJson(instance.durationPeriodPauseWarning),
       'durationPeriodFinishedWarning':
           const RxIntConverter().toJson(instance.durationPeriodFinishedWarning),
+      'nameLanguage': const RxStringConverter().toJson(instance.nameLanguage),
     };

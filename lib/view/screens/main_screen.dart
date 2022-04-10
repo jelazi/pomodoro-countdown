@@ -43,7 +43,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                             child: Obx(
                               () => Text(
                                 "Current Round: ".tr +
-                                    (_countDownController.currentRound.value +
+                                    (_countDownController
+                                                .currentRoundNumber.value +
                                             1)
                                         .toString(),
                                 textAlign: TextAlign.center,
@@ -59,13 +60,15 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                           flex: 15,
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: _countDownController.listRounds
-                                  .map(
-                                    (e) => TomatoIcon(e),
-                                  )
-                                  .toList(),
+                            child: Obx(
+                              () => Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: _countDownController.listRounds
+                                    .map(
+                                      (e) => TomatoIcon(e),
+                                    )
+                                    .toList(),
+                              ),
                             ),
                           ),
                         ),
