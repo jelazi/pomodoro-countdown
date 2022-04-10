@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:pausable_timer/pausable_timer.dart';
 import 'package:pomodoro_countdown/controllers/ring_controlller.dart';
 import 'package:pomodoro_countdown/controllers/settings_controller.dart';
+import 'package:pomodoro_countdown/view/dialogs_snackbars/my_snack_bar.dart';
 
 import '../others/logger.dart';
 
@@ -44,6 +45,8 @@ class CountDownController extends GetxController {
   late CustomTimerPainter painter;
   RxString timerString = RxString('');
   late Timer secondTimer;
+  Timer? pauseTimer;
+  Timer? finishedTimer;
   List<Rx<stateRound>> listRounds = [];
   bool isFromPause = false;
 
@@ -110,6 +113,12 @@ class CountDownController extends GetxController {
             '${duration.inMinutes}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
       });
 
+      if (pauseTimer != null) {
+        pauseTimer?.cancel();
+      }
+      if (finishedTimer != null) {
+        finishedTimer?.cancel();
+      }
       timer.start();
     } else if (stateCount == stateCountdown.play) {
       isFromPause = true;
@@ -118,6 +127,12 @@ class CountDownController extends GetxController {
       secondTimer.cancel();
       controller.stop();
       currentSecondsRound.value = currentDuration.inSeconds;
+      pauseTimer = Timer.periodic(
+          Duration(
+              seconds: _settingsController.durationPeriodPauseWarning.value),
+          (timer) {
+        warningTimeFinished();
+      });
     }
     _changedTextStartPaused(stateCount.value);
   }
@@ -166,6 +181,42 @@ class CountDownController extends GetxController {
     currentTypeRoundString.value = currentTypeRoundString.value == 'working'.tr
         ? 'breaking'.tr
         : 'working'.tr;
+    finishedTimer = Timer.periodic(
+        Duration(
+            seconds: _settingsController.durationPeriodFinishedWarning.value),
+        (timer) {
+      warningPause();
+    });
+  }
+
+  warningPause() {
+    if (_settingsController.warningPause.value) {
+      if (currentTypeRound == typeRound.breaking) {
+        MySnackBar.warningSnackBar(
+            'Pause'.tr, 'We are waiting to continue breaking.'.tr);
+        _ringController.playRingWarning();
+      }
+      if (currentTypeRound == typeRound.working) {
+        MySnackBar.warningSnackBar(
+            'Pause'.tr, 'We are waiting to continue working.'.tr);
+        _ringController.playRingWarning();
+      }
+    }
+  }
+
+  warningTimeFinished() {
+    if (currentTypeRound == typeRound.breaking &&
+        _settingsController.warningTimeEndingAfterWork.value) {
+      MySnackBar.warningSnackBar(
+          'Break is finished'.tr, 'It is time for work.'.tr);
+      _ringController.playRingWarning();
+    }
+    if (currentTypeRound == typeRound.working &&
+        _settingsController.warningTimeEndingAfterBreak.value) {
+      MySnackBar.warningSnackBar(
+          'Work is finished'.tr, 'It is time for rest.'.tr);
+      _ringController.playRingWarning();
+    }
   }
 
   int nextSecond() {
@@ -181,10 +232,10 @@ class CountDownController extends GetxController {
   }
 
   stop() {
-    if (stateCount != stateCountdown.play) {
+    if (stateCount.value != stateCountdown.play) {
       return;
     }
-    controller.value = 1;
+    controller.value = 0;
     timer.cancel();
     _endRound();
   }

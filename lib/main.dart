@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pomodoro_countdown/controllers/countdown_controller.dart';
 import 'package:pomodoro_countdown/controllers/file_controller.dart';
@@ -9,6 +10,11 @@ import 'package:pomodoro_countdown/view/items/pomodoro_drawer.dart';
 import 'package:pomodoro_countdown/view/screens/main_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitDown,
+    DeviceOrientation.portraitUp,
+  ]);
   final FileController _fileController = Get.put(FileController());
   final SettingsController _settingsController = Get.put(SettingsController());
   final RingController _ringController = Get.put(RingController());
@@ -24,7 +30,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
