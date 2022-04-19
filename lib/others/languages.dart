@@ -18,7 +18,7 @@ class Languages extends Translations {
           'It is time for rest.': 'Je čas na přestávku.',
           'openSettings': 'Nastavení',
           'sync': 'Synchronizace',
-          'Current Round: ': 'Právě probíhá: ',
+          'round': 'Kolo: ',
           'settingsScreen': 'Nastavení: ',
           'owner': 'Majitel',
           'nameOwner': 'Jméno: ',
@@ -57,6 +57,9 @@ class Languages extends Translations {
               'Časové rozpětí na ukončenou práci',
           'durationPeriodFinishedWarningHint': 'Změňte rozpětí varování',
           'Pomodoro countdown': 'Pomodoro časovač',
+          'emptyProject': 'Bez projektu, ',
+          'addProject': 'Přidat projekt',
+          'project': 'Projekt: '
         },
         'en_US': {
           'start': '',

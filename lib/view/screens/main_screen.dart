@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pomodoro_countdown/controllers/countdown_controller.dart';
-import 'package:pomodoro_countdown/view/buttons/start_stop_group_buttons.dart';
-import 'package:pomodoro_countdown/view/items/tomato_icon.dart';
+import '../../controllers/countdown_controller.dart';
+import '../../controllers/projects_controller.dart';
+import '../buttons/start_stop_group_buttons.dart';
+import '../items/tomato_icon.dart';
 
 class MainScreen extends StatefulWidget {
   MainScreen();
@@ -13,6 +14,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   final CountDownController _countDownController = Get.find();
+  final ProjectsController _projectsController = Get.find();
 
   @override
   void initState() {
@@ -42,7 +44,9 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                             padding: const EdgeInsets.all(10.0),
                             child: Obx(
                               () => Text(
-                                "Current Round: ".tr +
+                                _projectsController.currentProjectName.value +
+                                    ' ' +
+                                    "round".tr +
                                     (_countDownController
                                                 .currentRoundNumber.value +
                                             1)
