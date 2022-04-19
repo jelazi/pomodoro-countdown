@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:pomodoro_countdown/controllers/countdown_controller.dart';
-import 'package:pomodoro_countdown/controllers/file_controller.dart';
-import 'package:pomodoro_countdown/controllers/projects_controller.dart';
-import 'package:pomodoro_countdown/controllers/ring_controlller.dart';
-import 'package:pomodoro_countdown/controllers/settings_controller.dart';
-import 'package:pomodoro_countdown/view/items/pomodoro_drawer.dart';
-import 'package:pomodoro_countdown/view/screens/main_screen.dart';
+import 'controllers/countdown_controller.dart';
+import 'controllers/file_controller.dart';
+import 'controllers/projects_controller.dart';
+import 'controllers/ring_controlller.dart';
+import 'controllers/settings_controller.dart';
+import '/view/items/pomodoro_drawer.dart';
+import 'view/screens/main_screen.dart';
 
 import 'others/languages.dart';
 

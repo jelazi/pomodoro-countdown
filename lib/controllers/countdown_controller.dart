@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math' as math;
 
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +9,7 @@ import 'package:pomodoro_countdown/controllers/settings_controller.dart';
 import 'package:pomodoro_countdown/view/dialogs_snackbars/my_snack_bar.dart';
 
 import '../others/logger.dart';
+import '../view/custom_timer_painter.dart';
 
 enum stateCountdown {
   play,
@@ -40,7 +40,6 @@ class CountDownController extends GetxController {
   late Duration currentDuration;
   late PausableTimer timer;
   late TickerProvider tickerProvider;
-  RxString currentTypeRoundString = RxString('working'.tr);
   late CustomTimerPainter painter;
   RxString timerString = RxString('');
   late Timer secondTimer;
@@ -48,6 +47,13 @@ class CountDownController extends GetxController {
   Timer? finishedTimer;
   RxList<Rx<stateRound>> listRounds = RxList();
   bool isFromPause = false;
+
+  RxString get currentTypeRoundString {
+    if (currentRoundType == typeRound.working) {
+      return ('working'.tr).obs;
+    }
+    return ('breaking'.tr).obs;
+  }
 
   createAnimationController(TickerProvider ticker) {
     currentRoundType = typeRound.working;
@@ -204,9 +210,10 @@ class CountDownController extends GetxController {
     timerString.value =
         '${currentDuration.inMinutes}:${(currentDuration.inSeconds % 60).toString().padLeft(2, '0')}';
     controller.duration = currentDuration;
-    currentTypeRoundString.value = currentTypeRoundString.value == 'working'.tr
-        ? 'breaking'.tr
-        : 'working'.tr;
+    currentTypeRoundString.value =
+        (currentTypeRoundString.value == 'working'.tr)
+            ? 'breaking'.tr
+            : 'working'.tr;
     finishedTimer = Timer.periodic(
         Duration(
             seconds: _settingsController.durationPeriodFinishedWarning.value),
@@ -264,33 +271,5 @@ class CountDownController extends GetxController {
     controller.value = 0;
     timer.cancel();
     _endRound();
-  }
-}
-
-class CustomTimerPainter extends CustomPainter {
-  CustomTimerPainter({
-    required this.animation,
-    required this.color,
-  }) : super(repaint: animation);
-
-  final Animation<double> animation;
-  final Color color;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()
-      ..strokeWidth = 20.0
-      ..strokeCap = StrokeCap.butt
-      ..style = PaintingStyle.stroke;
-
-    canvas.drawCircle(size.center(Offset.zero), size.width / 2.0, paint);
-    paint.color = color;
-    double progress = (1.0 - animation.value) * 2 * math.pi;
-    canvas.drawArc(Offset.zero & size, math.pi * 1.5, progress, false, paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomTimerPainter old) {
-    return animation.value != old.animation.value || color != old.color;
   }
 }
