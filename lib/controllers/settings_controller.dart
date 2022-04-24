@@ -6,6 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:pomodoro_countdown/controllers/countdown_controller.dart';
 
 import '../jsons/json_converters.dart';
+import '../models/owner.dart';
 import '../others/logger.dart';
 
 part 'settings_controller.g.dart';
@@ -22,14 +23,14 @@ class SettingsController extends GetxController {
   RxInt secondsWork = RxInt(45 * 60);
   RxInt secondsBreak = RxInt(10 * 60);
   RxInt secondsBreakAfterRound = RxInt(20 * 60);
-  RxString nameOwner = RxString('Lubik');
-  RxString passwordOwner = RxString('pass');
   RxBool warningPause = RxBool(true);
   RxBool warningTimeEndingAfterWork = RxBool(true);
   RxBool warningTimeEndingAfterBreak = RxBool(true);
   RxInt durationPeriodPauseWarning = RxInt(60);
   RxInt durationPeriodFinishedWarning = RxInt(60);
   RxString nameLanguage = RxString('cs');
+  Owner? owner;
+  RxBool logIn = false.obs;
 
   factory SettingsController.fromJson(Map<String, dynamic> json) =>
       _$SettingsControllerFromJson(json);
@@ -39,12 +40,11 @@ class SettingsController extends GetxController {
     logger.v('loadSettingsData');
     final box = GetStorage();
     rounds.value = box.read('rounds') ?? 3;
+
     secondsWork.value = box.read('secondsWork') ?? 45 * 60;
     secondsBreak.value = box.read('secondsBreak') ?? 10 * 60;
     secondsBreakAfterRound.value =
         box.read('secondsBreakAfterRound') ?? 10 * 60;
-    nameOwner.value = box.read('nameOwner') ?? 'Lubik';
-    passwordOwner.value = box.read('passwordOwner') ?? 'pass';
     warningPause.value = box.read('warningPause') ?? true;
     warningTimeEndingAfterWork.value =
         box.read('warningTimeEndingAfterWork') ?? true;
@@ -54,6 +54,21 @@ class SettingsController extends GetxController {
         box.read('durationPeriodPauseWarning') ?? 60;
     durationPeriodFinishedWarning.value =
         box.read('durationPeriodFinishedWarning') ?? 60;
+    String? nameOwner = box.read('nameOwner');
+    String? passOwner = box.read('passOwner');
+    if (nameOwner != null && passOwner != null) {
+      owner = Owner(nameOwner, passOwner);
+      logIn.value = true;
+    }
+  }
+
+  checkOwner(Owner owner) {
+    if (owner.name == 'Lubik' && owner.password == 'pass') {
+      logger.d(owner.name);
+      logIn.value = true;
+      this.owner = owner;
+      logger.d(logIn.value);
+    }
   }
 
   Locale get language {
@@ -71,8 +86,10 @@ class SettingsController extends GetxController {
     box.write('secondsWork', secondsWork.value);
     box.write('secondsBreak', secondsBreak.value);
     box.write('secondsBreakAfterRound', secondsBreakAfterRound.value);
-    box.write('nameOwner', nameOwner.value);
-    box.write('passwordOwner', passwordOwner.value);
+    if (logIn.value) {
+      box.write('nameOwner', owner?.name ?? '');
+      box.write('passwordOwner', owner?.password ?? '');
+    }
     box.write('warningPause', warningPause.value);
     box.write('warningTimeEndingAfterWork', warningTimeEndingAfterWork.value);
     box.write('warningTimeEndingAfterBreak', warningTimeEndingAfterBreak.value);

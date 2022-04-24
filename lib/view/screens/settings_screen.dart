@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pomodoro_countdown/controllers/countdown_controller.dart';
 import 'package:pomodoro_countdown/controllers/settings_controller.dart';
+import 'package:pomodoro_countdown/models/owner.dart';
 import 'package:pomodoro_countdown/view/dialogs_snackbars/my_snack_bar.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -29,43 +30,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
         () => SettingsList(
           lightTheme: const SettingsThemeData(
             settingsListBackground: Colors.black,
-            titleTextColor: Colors.red,
+            settingsSectionBackground: Colors.white10,
+            titleTextColor: Colors.white,
             leadingIconsColor: Colors.white,
             settingsTileTextColor: Colors.white,
             tileDescriptionTextColor: Colors.white,
           ),
           sections: [
-            SettingsSection(
-              title: Text('owner'.tr),
-              tiles: <SettingsTile>[
-                SettingsTile.navigation(
-                  title: Text('nameOwner'.tr),
-                  leading: const Icon(Icons.person),
-                  value: Text(_settingsController.nameOwner.value),
-                  onPressed: (BuildContext context) {
-                    Get.dialog(getSettingsDialogString(
-                        'nameOwnerTitle'.tr,
-                        'nameOwnerHint'.tr,
-                        _settingsController.nameOwner.value,
-                        saveData,
-                        'nameOwner'));
-                  },
-                ),
-                SettingsTile.navigation(
-                  title: Text('password'.tr),
-                  leading: const Icon(Icons.password),
-                  value: Text(_settingsController.passwordOwner.value),
-                  onPressed: (BuildContext context) {
-                    Get.dialog(getSettingsDialogString(
-                        'passwordTitle'.tr,
-                        'passwordHint'.tr,
-                        _settingsController.passwordOwner.value,
-                        saveData,
-                        'password'));
-                  },
-                ),
-              ],
-            ),
+            _settingsController.logIn.value ? ownerSection() : loginSection(),
             SettingsSection(
               title: Text('rounds'.tr),
               tiles: <SettingsTile>[
@@ -138,7 +110,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             SettingsSection(title: Text('warnings'.tr), tiles: [
               SettingsTile.switchTile(
-                leading: Icon(Icons.bedroom_child),
+                leading: Icon(Icons.pause),
                 initialValue: _settingsController.warningPause.value,
                 title: Text('warningPause'.tr),
                 onToggle: (value) {
@@ -147,7 +119,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 },
               ),
               SettingsTile.switchTile(
-                leading: Icon(Icons.bedroom_child),
+                leading: Icon(Icons.work),
                 title: Text('warningTimeEndingAfterWork'.tr),
                 initialValue:
                     _settingsController.warningTimeEndingAfterWork.value,
@@ -157,7 +129,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 },
               ),
               SettingsTile.switchTile(
-                leading: Icon(Icons.bedroom_child),
+                leading: Icon(Icons.free_breakfast),
                 title: Text('warningTimeEndingAfterBreak'.tr),
                 initialValue:
                     _settingsController.warningTimeEndingAfterBreak.value,
@@ -167,7 +139,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 },
               ),
               SettingsTile.navigation(
-                leading: Icon(Icons.bedroom_child),
+                leading: Icon(Icons.timer_outlined),
                 title: Text('durationPeriodPauseWarning'.tr),
                 value: Text(_settingsController.durationPeriodPauseWarning.value
                         .toString() +
@@ -204,6 +176,129 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
+  SettingsSection loginSection() {
+    return SettingsSection(tiles: <SettingsTile>[
+      SettingsTile(
+          title: Text('login'),
+          leading: const Icon(Icons.login),
+          value: Text(''),
+          onPressed: (BuildContext context) {
+            loginDialog();
+          }),
+    ]);
+  }
+
+  logOutDialog() {
+    Get.dialog(AlertDialog(
+      title: Text('logOutTitle'.tr),
+      content: Text('logOutQuestion'.tr),
+      actions: [
+        ElevatedButton(
+          onPressed: () {
+            _settingsController.logIn.value = false;
+            Navigator.of(Get.overlayContext!).pop();
+          },
+          child: Text('yes'.tr),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.of(Get.overlayContext!).pop();
+          },
+          child: Text('no'.tr),
+        ),
+      ],
+    ));
+  }
+
+  loginDialog() {
+    Owner owner = Owner('', '');
+
+    Get.dialog(AlertDialog(
+      title: Text('loginTitle'.tr),
+      content: SizedBox(
+        height: 150,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: 'nameOwner'.tr,
+                  hintText: 'putNameOwner'.tr,
+                ),
+                keyboardType: TextInputType.text,
+                onChanged: (text) {
+                  setState(() {
+                    owner.name = text;
+                  });
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: 'passOwner'.tr,
+                  hintText: 'putPassOwner'.tr,
+                ),
+                keyboardType: TextInputType.text,
+                onChanged: (text) {
+                  setState(() {
+                    owner.password = text;
+                  });
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        ElevatedButton(
+          onPressed: () {
+            _settingsController.checkOwner(owner);
+            Navigator.of(Get.overlayContext!).pop();
+          },
+          child: Text('ok'.tr),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.of(Get.overlayContext!).pop();
+          },
+          child: Text('cancel'.tr),
+        ),
+      ],
+    ));
+  }
+
+  SettingsSection ownerSection() {
+    return SettingsSection(
+      title: Text('owner'.tr),
+      tiles: <SettingsTile>[
+        SettingsTile.navigation(
+          title: Text('nameOwner'.tr),
+          leading: const Icon(Icons.person),
+          value: Text(_settingsController.owner?.name ?? ''),
+          onPressed: null,
+        ),
+        SettingsTile.navigation(
+          title: Text('password'.tr),
+          leading: const Icon(Icons.password),
+          value: Text(_settingsController.owner?.password ?? ''),
+          onPressed: null,
+        ),
+        SettingsTile.navigation(
+          title: Text('logout'.tr),
+          leading: const Icon(Icons.logout),
+          onPressed: (BuildContext context) {
+            logOutDialog();
+          },
+        ),
+      ],
+    );
+  }
+
   saveData(var newData, String nameData) {
     logger.d('newData: $newData');
     logger.d('namedata: $nameData');
@@ -234,12 +329,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
         }
       case 'nameOwner':
         {
-          _settingsController.nameOwner.value = newData;
+          _settingsController.owner?.name = newData;
           break;
         }
       case 'passwordOwner':
         {
-          _settingsController.passwordOwner.value = newData;
+          _settingsController.owner?.password = newData;
           break;
         }
       case 'warningPause':
@@ -276,18 +371,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
     String value = val;
     return AlertDialog(
       title: Text(titleString),
-      content: TextField(
-        decoration: InputDecoration(
-          border: const OutlineInputBorder(),
-          labelText: value,
-          hintText: hintText,
+      content: SizedBox(
+        child: TextField(
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            labelText: value,
+            hintText: hintText,
+          ),
+          keyboardType: TextInputType.text,
+          onChanged: (text) {
+            setState(() {
+              value = text;
+            });
+          },
         ),
-        keyboardType: TextInputType.text,
-        onChanged: (text) {
-          setState(() {
-            value = text;
-          });
-        },
       ),
       actions: [
         ElevatedButton(
