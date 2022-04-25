@@ -35,7 +35,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               return Stack(
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

@@ -56,7 +56,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   },
                 ),
                 SettingsTile.navigation(
-                  leading: Icon(Icons.work),
+                  leading: const Icon(Icons.work),
                   title: Text('workTime'.tr),
                   value: Text((_settingsController.secondsWork.value / 60)
                           .truncate()
@@ -72,7 +72,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   },
                 ),
                 SettingsTile.navigation(
-                  leading: Icon(Icons.bed),
+                  leading: const Icon(Icons.bed),
                   title: Text('restTime'.tr),
                   value: Text((_settingsController.secondsBreak.value / 60)
                           .truncate()
@@ -89,7 +89,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   },
                 ),
                 SettingsTile.navigation(
-                  leading: Icon(Icons.bedroom_child),
+                  leading: const Icon(Icons.bedroom_child),
                   title: Text('longRestTime'.tr),
                   value: Text(
                       (_settingsController.secondsBreakAfterRound.value / 60)
@@ -110,7 +110,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             SettingsSection(title: Text('warnings'.tr), tiles: [
               SettingsTile.switchTile(
-                leading: Icon(Icons.pause),
+                leading: const Icon(Icons.pause),
                 initialValue: _settingsController.warningPause.value,
                 title: Text('warningPause'.tr),
                 onToggle: (value) {
@@ -119,7 +119,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 },
               ),
               SettingsTile.switchTile(
-                leading: Icon(Icons.work),
+                leading: const Icon(Icons.work),
                 title: Text('warningTimeEndingAfterWork'.tr),
                 initialValue:
                     _settingsController.warningTimeEndingAfterWork.value,
@@ -129,7 +129,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 },
               ),
               SettingsTile.switchTile(
-                leading: Icon(Icons.free_breakfast),
+                leading: const Icon(Icons.free_breakfast),
                 title: Text('warningTimeEndingAfterBreak'.tr),
                 initialValue:
                     _settingsController.warningTimeEndingAfterBreak.value,
@@ -139,7 +139,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 },
               ),
               SettingsTile.navigation(
-                leading: Icon(Icons.timer_outlined),
+                leading: const Icon(Icons.timer_outlined),
                 title: Text('durationPeriodPauseWarning'.tr),
                 value: Text(_settingsController.durationPeriodPauseWarning.value
                         .toString() +
@@ -154,7 +154,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 },
               ),
               SettingsTile.navigation(
-                leading: Icon(Icons.bedroom_child),
+                leading: const Icon(Icons.bedroom_child),
                 title: Text('durationPeriodFinishedWarning'.tr),
                 value: Text(_settingsController
                         .durationPeriodFinishedWarning.value
@@ -179,9 +179,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   SettingsSection loginSection() {
     return SettingsSection(tiles: <SettingsTile>[
       SettingsTile(
-          title: Text('login'),
+          title: Text('login'.tr),
           leading: const Icon(Icons.login),
-          value: Text(''),
+          value: const Text(''),
           onPressed: (BuildContext context) {
             loginDialog();
           }),

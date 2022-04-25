@@ -3,4 +3,4 @@ TODO: notification in background - solution: https://stackoverflow.com/questions
 TODO: login  
 TODO: setting turn of sounds
 TODO: custom sounds
-TODO: localize to eng
+
