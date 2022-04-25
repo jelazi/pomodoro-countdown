@@ -64,10 +64,8 @@ class SettingsController extends GetxController {
 
   checkOwner(Owner owner) {
     if (owner.name == 'Lubik' && owner.password == 'pass') {
-      logger.d(owner.name);
       logIn.value = true;
       this.owner = owner;
-      logger.d(logIn.value);
     }
   }
 

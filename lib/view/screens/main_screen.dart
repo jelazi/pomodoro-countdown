@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pomodoro_countdown/controllers/settings_controller.dart';
 import '../../controllers/countdown_controller.dart';
 import '../../controllers/projects_controller.dart';
 import '../buttons/start_stop_group_buttons.dart';
@@ -15,6 +16,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   final CountDownController _countDownController = Get.find();
   final ProjectsController _projectsController = Get.find();
+  final SettingsController _settingsController = Get.find();
 
   @override
   void initState() {
@@ -24,7 +26,6 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData themeData = Theme.of(context);
     return Scaffold(
       backgroundColor: Colors.white10,
       body: Center(
@@ -39,23 +40,41 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Expanded(
-                          flex: 10,
+                          flex: 12,
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
                             child: Obx(
-                              () => Text(
-                                _projectsController.currentProjectName.value +
-                                    ' ' +
-                                    "round".tr +
-                                    (_countDownController
-                                                .currentRoundNumber.value +
-                                            1)
-                                        .toString(),
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: Colors.white,
-                                ),
+                              () => Column(
+                                children: [
+                                  Visibility(
+                                    visible: _settingsController.logIn.value,
+                                    child: Text(
+                                      _projectsController
+                                          .currentProjectName.value,
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        fontSize: 20.0,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: Text(
+                                      "round".tr +
+                                          (_countDownController
+                                                      .currentRoundNumber
+                                                      .value +
+                                                  1)
+                                              .toString(),
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        fontSize: 20.0,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -103,7 +122,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                                             () => Text(
                                               _countDownController
                                                   .timerString.value,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 40.0,
                                                   color: Colors.white),
                                             ),
@@ -126,7 +145,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                                 _countDownController
                                     .currentTypeRoundString.value,
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20.0,
                                   color: Colors.white,
                                 ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pie_chart/pie_chart.dart';
+import 'package:pomodoro_countdown/controllers/settings_controller.dart';
 import '../../controllers/projects_controller.dart';
 import '../screens/settings_screen.dart';
 
@@ -18,6 +19,7 @@ class PomodoroDrawer extends StatefulWidget {
 }
 
 class _PomodoroDrawerState extends State<PomodoroDrawer> {
+  final SettingsController _settingsController = Get.find();
   final colorList = <Color>[
     Colors.red,
   ];
@@ -25,41 +27,46 @@ class _PomodoroDrawerState extends State<PomodoroDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      backgroundColor: Colors.black87,
       child: ListView(
         // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
+
         children: [
           DrawerHeader(
-            decoration: BoxDecoration(),
+            decoration: const BoxDecoration(),
             child: Stack(
               children: [
-                Visibility(
-                  visible: widget._projectsController.currentProject != null,
-                  child: Center(
-                    child: SizedBox(
-                      width: 200,
-                      height: 200,
-                      child: PieChart(
-                        ringStrokeWidth: 15,
-                        dataMap: widget.dataMap,
-                        chartType: ChartType.ring,
-                        baseChartColor: Colors.grey,
-                        colorList: colorList,
-                        chartValuesOptions: ChartValuesOptions(
-                          showChartValuesInPercentage: true,
+                Obx(
+                  () => Visibility(
+                    visible: _settingsController.logIn.value,
+                    child: Center(
+                      child: SizedBox(
+                        width: 200,
+                        height: 200,
+                        child: PieChart(
+                          ringStrokeWidth: 15,
+                          dataMap: widget.dataMap,
+                          chartType: ChartType.ring,
+                          baseChartColor: Colors.grey,
+                          colorList: colorList,
+                          chartValuesOptions: const ChartValuesOptions(
+                            showChartValuesInPercentage: true,
+                          ),
+                          emptyColor: Colors.white,
+                          totalValue: widget._projectsController
+                              .currentProjectTotalValue.value,
+                          legendOptions: const LegendOptions(
+                              legendTextStyle: TextStyle(color: Colors.white),
+                              legendPosition: LegendPosition.bottom),
                         ),
-                        emptyColor: Colors.black,
-                        totalValue: widget
-                            ._projectsController.currentProjectTotalValue.value,
-                        legendOptions: LegendOptions(
-                            legendPosition: LegendPosition.bottom),
                       ),
                     ),
                   ),
                 ),
                 Visibility(
-                  visible: widget._projectsController.currentProject == null,
-                  child: Center(
+                  visible: !_settingsController.logIn.value,
+                  child: const Center(
                     child: SizedBox(
                       width: 100,
                       height: 100,
@@ -72,17 +79,32 @@ class _PomodoroDrawerState extends State<PomodoroDrawer> {
               ],
             ),
           ),
-          ListTile(
-            title: Text('addProject'.tr),
-            leading: const Icon(Icons.add),
-            onTap: () {
-              Navigator.pop(context);
-              if (widget._projectsController.currentProject == null) {}
-            },
+          Visibility(
+            visible: _settingsController.logIn.value,
+            child: ListTile(
+              tileColor: Colors.white24,
+              title: Text(
+                'addProject'.tr,
+                style: const TextStyle(color: Colors.white),
+              ),
+              leading: const Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                if (widget._projectsController.currentProject == null) {}
+              },
+            ),
           ),
           ListTile(
-            title: Text('openSettings'.tr),
-            leading: const Icon(Icons.settings),
+            tileColor: Colors.white24,
+            title: Text('openSettings'.tr,
+                style: const TextStyle(color: Colors.white)),
+            leading: const Icon(
+              Icons.settings,
+              color: Colors.white,
+            ),
             onTap: () {
               Navigator.pop(context);
               Navigator.push(context,
@@ -90,8 +112,12 @@ class _PomodoroDrawerState extends State<PomodoroDrawer> {
             },
           ),
           ListTile(
-            title: Text('sync'.tr),
-            leading: const Icon(Icons.sync),
+            tileColor: Colors.white24,
+            title: Text('sync'.tr, style: const TextStyle(color: Colors.white)),
+            leading: const Icon(
+              Icons.sync,
+              color: Colors.white,
+            ),
             onTap: () {
               // TODO:Update the state of the app.
               // ...
