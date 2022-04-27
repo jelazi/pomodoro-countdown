@@ -216,7 +216,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     Get.dialog(AlertDialog(
       title: Text('loginTitle'.tr),
       content: SizedBox(
-        height: 150,
+        height: 200,
         child: Column(
           children: [
             Padding(

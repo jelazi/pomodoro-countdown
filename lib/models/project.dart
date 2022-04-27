@@ -1,3 +1,7 @@
+import 'package:json_annotation/json_annotation.dart';
+part 'project.g.dart';
+
+@JsonSerializable(explicitToJson: true)
 class Project {
   String nameProject;
   String owner;
@@ -14,4 +18,8 @@ class Project {
     Duration time = Duration(seconds: seconds);
     elapsedTime += time;
   }
+
+  factory Project.fromJson(Map<String, dynamic> json) =>
+      _$ProjectFromJson(json);
+  Map<String, dynamic> toJson() => _$ProjectToJson(this);
 }

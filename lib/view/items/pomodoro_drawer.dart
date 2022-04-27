@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:pomodoro_countdown/controllers/settings_controller.dart';
+import 'package:pomodoro_countdown/view/screens/add_project.dart';
 import '../../controllers/projects_controller.dart';
 import '../screens/settings_screen.dart';
 
@@ -93,7 +94,7 @@ class _PomodoroDrawerState extends State<PomodoroDrawer> {
               ),
               onTap: () {
                 Navigator.pop(context);
-                if (widget._projectsController.currentProject == null) {}
+                Get.dialog(AddProject());
               },
             ),
           ),

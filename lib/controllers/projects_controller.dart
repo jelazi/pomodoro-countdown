@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 
@@ -5,7 +6,7 @@ import '../models/project.dart';
 import '../others/logger.dart';
 
 class ProjectsController extends GetxController {
-  Map<String, Project> projects = {};
+  List<Project> projects = [];
   Duration scheduledTime = Duration();
   Project? currentProject;
 
@@ -14,7 +15,8 @@ class ProjectsController extends GetxController {
   }
   bool newProject(String nameProject, String ownerName,
       {Duration scheduledTime = const Duration()}) {
-    if (projects.containsKey(nameProject)) return false;
+    if (projects.any((element) => element.nameProject == nameProject))
+      return false;
     Project newProject = Project(nameProject: nameProject, owner: ownerName);
     if (scheduledTime.inSeconds != 0) {
       newProject = Project(
@@ -23,16 +25,34 @@ class ProjectsController extends GetxController {
         scheduledTime: scheduledTime,
       );
     }
-    projects[nameProject] = newProject;
+    projects.add(newProject);
     return true;
+  }
+
+  bool existsNameProject(String newName) {
+    return projects.any((element) => element.nameProject == newName);
   }
 
   addTestProject() {
     Project testProject = Project(nameProject: 'Test project', owner: 'me');
     testProject.scheduledTime = Duration(minutes: 50);
     testProject.elapsedTime = Duration(minutes: 10);
-    projects[testProject.nameProject] = testProject;
+    projects.add(testProject);
     currentProject = testProject;
+  }
+
+  bool setCurrentProjectByName(String nameProject) {
+    projects.map((e) {
+      if (e.nameProject == nameProject) {
+        currentProject = e;
+        return true;
+      }
+    });
+    return false;
+  }
+
+  List<String> getListNamesProject() {
+    return projects.map((e) => e.nameProject).toList();
   }
 
   RxString get currentProjectName {
