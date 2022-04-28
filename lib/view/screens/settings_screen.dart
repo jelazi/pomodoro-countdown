@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pomodoro_countdown/controllers/countdown_controller.dart';
 import 'package:pomodoro_countdown/controllers/settings_controller.dart';
-import 'package:pomodoro_countdown/models/owner.dart';
+import 'package:pomodoro_countdown/models/user.dart';
 import 'package:pomodoro_countdown/view/dialogs_snackbars/my_snack_bar.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -37,7 +37,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             tileDescriptionTextColor: Colors.white,
           ),
           sections: [
-            _settingsController.logIn.value ? ownerSection() : loginSection(),
+            _settingsController.logIn.value ? userSection() : loginSection(),
             SettingsSection(
               title: Text('rounds'.tr),
               tiles: <SettingsTile>[
@@ -211,7 +211,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   loginDialog() {
-    Owner owner = Owner('', '');
+    User user = User('', '');
 
     Get.dialog(AlertDialog(
       title: Text('loginTitle'.tr),
@@ -224,13 +224,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: TextField(
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  labelText: 'nameOwner'.tr,
-                  hintText: 'putNameOwner'.tr,
+                  labelText: 'nameUser'.tr,
+                  hintText: 'putNameUser'.tr,
                 ),
                 keyboardType: TextInputType.text,
                 onChanged: (text) {
                   setState(() {
-                    owner.name = text;
+                    user.name = text;
                   });
                 },
               ),
@@ -240,13 +240,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: TextField(
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  labelText: 'passOwner'.tr,
-                  hintText: 'putPassOwner'.tr,
+                  labelText: 'passUser'.tr,
+                  hintText: 'putPassUser'.tr,
                 ),
                 keyboardType: TextInputType.text,
                 onChanged: (text) {
                   setState(() {
-                    owner.password = text;
+                    user.password = text;
                   });
                 },
               ),
@@ -257,7 +257,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       actions: [
         ElevatedButton(
           onPressed: () {
-            _settingsController.checkOwner(owner);
+            _settingsController.checkUser(user);
             Navigator.of(Get.overlayContext!).pop();
           },
           child: Text('ok'.tr),
@@ -272,20 +272,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
     ));
   }
 
-  SettingsSection ownerSection() {
+  SettingsSection userSection() {
     return SettingsSection(
-      title: Text('owner'.tr),
+      title: Text('user'.tr),
       tiles: <SettingsTile>[
         SettingsTile.navigation(
-          title: Text('nameOwner'.tr),
+          title: Text('nameUser'.tr),
           leading: const Icon(Icons.person),
-          value: Text(_settingsController.owner?.name ?? ''),
+          value: Text(_settingsController.currentUser?.name ?? ''),
           onPressed: null,
         ),
         SettingsTile.navigation(
           title: Text('password'.tr),
           leading: const Icon(Icons.password),
-          value: Text(_settingsController.owner?.password ?? ''),
+          value: Text(_settingsController.currentUser?.password ?? ''),
           onPressed: null,
         ),
         SettingsTile.navigation(
@@ -327,14 +327,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
           _countDownController.resetValues();
           break;
         }
-      case 'nameOwner':
+      case 'nameUser':
         {
-          _settingsController.owner?.name = newData;
+          _settingsController.currentUser?.name = newData;
           break;
         }
-      case 'passwordOwner':
+      case 'passwordUser':
         {
-          _settingsController.owner?.password = newData;
+          _settingsController.currentUser?.password = newData;
           break;
         }
       case 'warningPause':

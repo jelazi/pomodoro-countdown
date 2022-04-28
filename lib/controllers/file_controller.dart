@@ -7,15 +7,15 @@ class FileController extends GetxController {
     box.write('projects', jsonProjects);
   }
 
-  String? getProject() {
+  String? getProjects() {
     return box.read('projects');
   }
 
-  saveOwners(String jsonOwners) {
-    box.write('owners', jsonOwners);
+  saveUsers(String jsonUsers) {
+    box.write('users', jsonUsers);
   }
 
-  String? getOwners() {
-    return box.read('owners');
+  String? getUsers() {
+    return box.read('users');
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pausable_timer/pausable_timer.dart';
+import 'package:pomodoro_countdown/controllers/projects_controller.dart';
 import 'package:pomodoro_countdown/controllers/ring_controlller.dart';
 import 'package:pomodoro_countdown/controllers/settings_controller.dart';
 import 'package:pomodoro_countdown/view/dialogs_snackbars/my_snack_bar.dart';
@@ -29,6 +30,7 @@ enum stateRound {
 class CountDownController extends GetxController {
   final SettingsController _settingsController = Get.find();
   final RingController _ringController = Get.find();
+  final ProjectsController _projectsController = Get.find();
 
   Rx<stateCountdown> stateCount = Rx(stateCountdown.stop);
   RxString startPausedText = RxString('start'.tr);
@@ -105,7 +107,7 @@ class CountDownController extends GetxController {
   restartTimers() {
     currentDuration = Duration(seconds: currentRoundSeconds.value);
     timer = PausableTimer(currentDuration, () {
-      _endRound();
+      _endRound(true);
     });
 
     pauseTimer?.cancel();
@@ -169,15 +171,13 @@ class CountDownController extends GetxController {
     _changedTextStartPaused(stateCount.value);
   }
 
-  _endRound() {
+  _endRound(bool isNormalStop) {
     isFromPause = false;
     if (currentRoundType == typeRound.working) {
       _ringController.playStopWorking();
     } else {
       _ringController.playStopBreaking();
     }
-    logger.d('round is finished');
-    print(currentRoundSeconds);
     stateCount.value = stateCountdown.stop;
     _changedTextStartPaused(stateCount.value);
     if (currentRoundType == typeRound.breaking) {
@@ -190,6 +190,9 @@ class CountDownController extends GetxController {
         });
       }
     } else {
+      if (isNormalStop) {
+        _projectsController.addDurationToProject(currentDuration);
+      }
       listRounds[currentRoundNumber.value].value = stateRound.done;
     }
     currentRoundType = currentRoundType == typeRound.working
@@ -268,8 +271,12 @@ class CountDownController extends GetxController {
     if (stateCount.value != stateCountdown.play) {
       return;
     }
+    Duration duration = timer.elapsed;
+    if (currentRoundType == typeRound.working) {
+      _projectsController.addDurationToProject(duration);
+    }
     controller.value = 0;
     timer.cancel();
-    _endRound();
+    _endRound(false);
   }
 }

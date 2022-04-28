@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:pomodoro_countdown/controllers/projects_controller.dart';
-import 'package:pomodoro_countdown/controllers/settings_controller.dart';
-import 'package:pomodoro_countdown/view/dialogs_snackbars/my_snack_bar.dart';
+import 'package:pomodoro_countdown/models/user.dart';
 
-class AddProject extends StatefulWidget {
-  AddProject({Key? key}) : super(key: key);
+import '../../controllers/settings_controller.dart';
+import '../dialogs_snackbars/my_snack_bar.dart';
+
+class NewUserDialog extends StatefulWidget {
+  NewUserDialog({Key? key}) : super(key: key);
 
   @override
-  State<AddProject> createState() => _AddProjectState();
+  State<NewUserDialog> createState() => _NewUserDialogState();
 }
 
-class _AddProjectState extends State<AddProject> {
+class _NewUserDialogState extends State<NewUserDialog> {
   TextEditingController nameController = TextEditingController();
-  TextEditingController scheduledTimeController = TextEditingController();
-  final ProjectsController _projectsController = Get.find();
+  TextEditingController passwordController = TextEditingController();
   final SettingsController _settingsController = Get.find();
-
   String name = '';
-  int durationMinutes = 0;
+  String password = '';
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +38,7 @@ class _AddProjectState extends State<AddProject> {
                 children: [
                   Expanded(
                     child: Text(
-                      'nameProject'.tr,
+                      'nameUser'.tr,
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
@@ -87,28 +85,23 @@ class _AddProjectState extends State<AddProject> {
                 children: [
                   Expanded(
                     child: Text(
-                      'scheduledTime'.tr,
-                      style: const TextStyle(color: Colors.white),
+                      'passUser'.tr,
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                   Expanded(
                     child: TextField(
-                      controller: scheduledTimeController,
-                      keyboardType:
-                          const TextInputType.numberWithOptions(signed: true),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
+                      controller: passwordController,
                       onChanged: (value) {
-                        int? val = int.tryParse(value);
-                        if (val != null && val > 0) {
-                          durationMinutes = val;
-                        }
+                        setState(() {
+                          password = value;
+                        });
                       },
                       style: const TextStyle(
                         color: Colors.white,
                       ),
                       decoration: const InputDecoration(
+                        fillColor: Colors.white,
                         border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.red),
                         ),
@@ -139,7 +132,7 @@ class _AddProjectState extends State<AddProject> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   ElevatedButton(
-                    onPressed: addProject,
+                    onPressed: addUser,
                     child: Text('add'.tr),
                   ),
                   ElevatedButton(
@@ -155,27 +148,15 @@ class _AddProjectState extends State<AddProject> {
     );
   }
 
-  addProject() {
-    Duration duration = Duration();
-    if (durationMinutes > 45) {
-      duration = Duration(minutes: durationMinutes);
+  addUser() {
+    Navigator.of(Get.overlayContext!).pop();
+    User user = User(name, password);
+    if (_settingsController.addNewUser(user)) {
+      MySnackBar.warningSnackBar('newUser'.tr, 'New user $name  created.');
     } else {
       MySnackBar.warningSnackBar(
-          'tooSmall'.tr, 'This duration is too short.'.tr);
-      return;
+          'newUser'.tr, 'New user $name  has same name with another user.');
     }
-    String nameProject = name;
-    if (_projectsController.existsNameProject(nameProject)) {
-      MySnackBar.warningSnackBar(
-          'sameName'.tr, 'There is same name project.'.tr);
-      return;
-    }
-    _projectsController.newProject(
-        nameProject, _settingsController.currentUser?.name ?? '',
-        scheduledTime: duration);
-    Navigator.of(Get.overlayContext!).pop();
-    MySnackBar.warningSnackBar(
-        'newProject'.tr, 'Project $nameProject  created.'.tr);
   }
 
   cancel() {

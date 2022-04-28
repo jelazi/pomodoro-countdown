@@ -9,7 +9,6 @@ import 'controllers/ring_controlller.dart';
 import 'controllers/settings_controller.dart';
 import '/view/items/pomodoro_drawer.dart';
 import 'view/screens/main_screen.dart';
-
 import 'others/languages.dart';
 
 void main() async {
@@ -22,9 +21,9 @@ void main() async {
   final FileController _fileController = Get.put(FileController());
   final SettingsController _settingsController = Get.put(SettingsController());
   final RingController _ringController = Get.put(RingController());
+  final ProjectsController _projectControlller = Get.put(ProjectsController());
   final CountDownController _countDownController =
       Get.put(CountDownController());
-  final ProjectsController _projectControlller = Get.put(ProjectsController());
 
   runApp(MyApp());
 }

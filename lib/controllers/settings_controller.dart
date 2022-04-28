@@ -1,12 +1,14 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:pomodoro_countdown/controllers/countdown_controller.dart';
+import 'package:pomodoro_countdown/models/project.dart';
 
 import '../jsons/json_converters.dart';
-import '../models/owner.dart';
+import '../models/user.dart';
 import '../others/logger.dart';
 
 part 'settings_controller.g.dart';
@@ -29,8 +31,12 @@ class SettingsController extends GetxController {
   RxInt durationPeriodPauseWarning = RxInt(60);
   RxInt durationPeriodFinishedWarning = RxInt(60);
   RxString nameLanguage = RxString('cs');
-  Owner? owner;
+  User? currentUser;
   RxBool logIn = false.obs;
+  RxBool isCurrentUserAdmin = false.obs;
+  List<User> listUsers = [];
+  @JsonKey(ignore: true)
+  final box = GetStorage();
 
   factory SettingsController.fromJson(Map<String, dynamic> json) =>
       _$SettingsControllerFromJson(json);
@@ -54,18 +60,55 @@ class SettingsController extends GetxController {
         box.read('durationPeriodPauseWarning') ?? 60;
     durationPeriodFinishedWarning.value =
         box.read('durationPeriodFinishedWarning') ?? 60;
-    String? nameOwner = box.read('nameOwner');
-    String? passOwner = box.read('passOwner');
-    if (nameOwner != null && passOwner != null) {
-      owner = Owner(nameOwner, passOwner);
+    String? nameUser = box.read('nameUser');
+    String? passUser = box.read('passUser');
+    if (nameUser != null && passUser != null) {
+      currentUser = User(nameUser, passUser);
       logIn.value = true;
+      if (currentUser!.name == 'admin' && currentUser!.password == 'pass') {
+        currentUser?.isAdmin = true;
+        isCurrentUserAdmin.value = true;
+      }
+      checkAdminUser(currentUser!);
     }
   }
 
-  checkOwner(Owner owner) {
-    if (owner.name == 'Lubik' && owner.password == 'pass') {
+  bool addNewUser(User user) {
+    if (listUsers.any((element) => (element.name == user.name))) {
+      return false;
+    } else {
+      listUsers.add(user);
+      return true;
+    }
+  }
+
+  checkUser(User user) {
+    checkAdminUser(user);
+    if (listUsers.any((element) =>
+        (element.name == user.name && element.password == user.password))) {
       logIn.value = true;
-      this.owner = owner;
+      currentUser = user;
+      saveCurrentUser();
+    }
+  }
+
+  checkAdminUser(User user) {
+    if (user.name == 'admin' && user.password == 'pass') {
+      currentUser?.isAdmin = true;
+      logIn.value = true;
+      currentUser = user;
+      saveCurrentUser();
+      isCurrentUserAdmin.value = true;
+    } else {
+      currentUser?.isAdmin = false;
+      isCurrentUserAdmin.value = false;
+    }
+  }
+
+  saveCurrentUser() {
+    if (currentUser != null) {
+      box.write('nameUser', currentUser!.name);
+      box.write('passUser', currentUser!.password);
     }
   }
 
@@ -79,14 +122,14 @@ class SettingsController extends GetxController {
 
   saveSettingsData() async {
     CountDownController _countDownController = Get.find();
-    final box = GetStorage();
+
     box.write('rounds', rounds.value);
     box.write('secondsWork', secondsWork.value);
     box.write('secondsBreak', secondsBreak.value);
     box.write('secondsBreakAfterRound', secondsBreakAfterRound.value);
     if (logIn.value) {
-      box.write('nameOwner', owner?.name ?? '');
-      box.write('passwordOwner', owner?.password ?? '');
+      box.write('nameUser', currentUser?.name ?? '');
+      box.write('passwordUser', currentUser?.password ?? '');
     }
     box.write('warningPause', warningPause.value);
     box.write('warningTimeEndingAfterWork', warningTimeEndingAfterWork.value);

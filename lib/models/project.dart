@@ -4,13 +4,13 @@ part 'project.g.dart';
 @JsonSerializable(explicitToJson: true)
 class Project {
   String nameProject;
-  String owner;
+  String user;
   Duration scheduledTime = const Duration(days: 1000);
   Duration elapsedTime = const Duration();
 
   Project({
     required this.nameProject,
-    required this.owner,
+    required this.user,
     this.scheduledTime = const Duration(),
   });
 

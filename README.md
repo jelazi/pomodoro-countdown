@@ -7,8 +7,8 @@ Pomodoro application in Flutter
 ### settings
 - change themes
 - change time working, time breaking, number of rounds...
-- name owner
-- passwor owner
+- name user
+- passwor user
 
 
 

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:pomodoro_countdown/controllers/settings_controller.dart';
+
 import 'package:pomodoro_countdown/view/screens/add_project.dart';
 import '../../controllers/projects_controller.dart';
+import '../screens/new_user_dialog.dart';
 import '../screens/settings_screen.dart';
 
 class PomodoroDrawer extends StatefulWidget {
@@ -78,6 +80,24 @@ class _PomodoroDrawerState extends State<PomodoroDrawer> {
                   ),
                 ),
               ],
+            ),
+          ),
+          Visibility(
+            visible: _settingsController.isCurrentUserAdmin.value,
+            child: ListTile(
+              tileColor: Colors.white24,
+              title: Text(
+                'addUser'.tr,
+                style: const TextStyle(color: Colors.white),
+              ),
+              leading: const Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                Get.dialog(NewUserDialog());
+              },
             ),
           ),
           Visibility(
