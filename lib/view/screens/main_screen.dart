@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pomodoro_countdown/controllers/settings_controller.dart';
+import '../../controllers/settings_controller.dart';
 import '../../controllers/countdown_controller.dart';
 import '../../controllers/projects_controller.dart';
 import '../buttons/start_stop_group_buttons.dart';

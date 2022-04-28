@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pomodoro_countdown/controllers/countdown_controller.dart';
+import '../../controllers/countdown_controller.dart';
 
 class StartStopGroupButton extends StatefulWidget {
   StartStopGroupButton();

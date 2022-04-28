@@ -4,8 +4,7 @@ import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:pomodoro_countdown/controllers/countdown_controller.dart';
-import 'package:pomodoro_countdown/models/project.dart';
+import 'countdown_controller.dart';
 
 import '../jsons/json_converters.dart';
 import '../models/user.dart';

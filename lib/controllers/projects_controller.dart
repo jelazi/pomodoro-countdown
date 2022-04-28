@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:pomodoro_countdown/controllers/file_controller.dart';
-import 'package:pomodoro_countdown/view/dialogs_snackbars/my_snack_bar.dart';
+import 'file_controller.dart';
+import '../view/dialogs_snackbars/my_snack_bar.dart';
 
 import '../models/project.dart';
 import '../others/logger.dart';

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:pomodoro_countdown/controllers/countdown_controller.dart';
-import 'package:pomodoro_countdown/controllers/settings_controller.dart';
-import 'package:pomodoro_countdown/models/user.dart';
-import 'package:pomodoro_countdown/view/dialogs_snackbars/my_snack_bar.dart';
+import '../../controllers/countdown_controller.dart';
+import '../../controllers/settings_controller.dart';
+import '../../models/user.dart';
+import '../dialogs_snackbars/my_snack_bar.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 import '../../others/logger.dart';

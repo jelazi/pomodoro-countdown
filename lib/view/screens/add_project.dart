@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:pomodoro_countdown/controllers/projects_controller.dart';
-import 'package:pomodoro_countdown/controllers/settings_controller.dart';
-import 'package:pomodoro_countdown/view/dialogs_snackbars/my_snack_bar.dart';
+import '../../controllers/projects_controller.dart';
+import '../../controllers/settings_controller.dart';
+import '../dialogs_snackbars/my_snack_bar.dart';
 
 class AddProject extends StatefulWidget {
   AddProject({Key? key}) : super(key: key);

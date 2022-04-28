@@ -4,10 +4,10 @@ import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pausable_timer/pausable_timer.dart';
-import 'package:pomodoro_countdown/controllers/projects_controller.dart';
-import 'package:pomodoro_countdown/controllers/ring_controlller.dart';
-import 'package:pomodoro_countdown/controllers/settings_controller.dart';
-import 'package:pomodoro_countdown/view/dialogs_snackbars/my_snack_bar.dart';
+import 'projects_controller.dart';
+import 'ring_controlller.dart';
+import 'settings_controller.dart';
+import '../view/dialogs_snackbars/my_snack_bar.dart';
 
 import '../others/logger.dart';
 import '../view/custom_timer_painter.dart';
