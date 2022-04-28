@@ -28,8 +28,8 @@ class _AddProjectState extends State<AddProject> {
       insetPadding: EdgeInsets.zero,
       shape: RoundedRectangleBorder(side: BorderSide(color: Colors.white)),
       content: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.3,
-        width: MediaQuery.of(context).size.width * 0.5,
+        height: 250,
+        width: 300,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

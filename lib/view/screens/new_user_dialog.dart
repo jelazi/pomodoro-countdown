@@ -26,8 +26,8 @@ class _NewUserDialogState extends State<NewUserDialog> {
       insetPadding: EdgeInsets.zero,
       shape: RoundedRectangleBorder(side: BorderSide(color: Colors.white)),
       content: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.3,
-        width: MediaQuery.of(context).size.width * 0.5,
+        height: 250,
+        width: 300,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -106,7 +106,7 @@ class _NewUserDialogState extends State<NewUserDialog> {
                           borderSide: BorderSide(color: Colors.red),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
+                          borderSide: BorderSide(color: Colors.white),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blueGrey),
@@ -118,7 +118,7 @@ class _NewUserDialogState extends State<NewUserDialog> {
                           borderSide: BorderSide(color: Colors.orangeAccent),
                         ),
                         disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
+                          borderSide: BorderSide(color: Colors.grey),
                         ),
                       ),
                     ),
@@ -152,10 +152,11 @@ class _NewUserDialogState extends State<NewUserDialog> {
     Navigator.of(Get.overlayContext!).pop();
     User user = User(name, password);
     if (_settingsController.addNewUser(user)) {
-      MySnackBar.warningSnackBar('newUser'.tr, 'New user $name  created.');
+      MySnackBar.warningSnackBar(
+          'newUser'.tr, 'newUser'.tr + ': ' + name + 'created'.tr);
     } else {
       MySnackBar.warningSnackBar(
-          'newUser'.tr, 'New user $name  has same name with another user.');
+          'newUser'.tr, 'newUser'.tr + ': ' + name + 'hasSameName'.tr);
     }
   }
 

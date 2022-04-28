@@ -51,7 +51,11 @@ class ProjectsController extends GetxController {
       currentProject!.elapsedTime += duration;
       logger.d(
           'addDuration elapsedTime in seconds: ${currentProject!.elapsedTime.inSeconds}');
-
+      MySnackBar.warningSnackBar(
+          'addDurationTitle'.tr,
+          'addDuration1'.tr +
+              duration.inMinutes.toString() +
+              'addDuration2'.tr);
       fileController.saveProjects(listProjectsToJson(projects));
     }
   }

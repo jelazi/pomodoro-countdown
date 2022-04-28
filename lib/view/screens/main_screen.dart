@@ -40,7 +40,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Expanded(
-                          flex: 12,
+                          flex: 16,
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
                             child: Obx(
@@ -80,9 +80,9 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                           ),
                         ),
                         Expanded(
-                          flex: 15,
+                          flex: 16,
                           child: Padding(
-                            padding: const EdgeInsets.all(10.0),
+                            padding: const EdgeInsets.all(8.0),
                             child: Obx(
                               () => Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
