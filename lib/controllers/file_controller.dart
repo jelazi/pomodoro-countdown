@@ -11,11 +11,11 @@ class FileController extends GetxController {
     return box.read('projects');
   }
 
-  saveUsers(String jsonUsers) {
+  saveUsers(List<String> jsonUsers) {
     box.write('users', jsonUsers);
   }
 
-  String? getUsers() {
+  List<String>? getUsers() {
     return box.read('users');
   }
 }

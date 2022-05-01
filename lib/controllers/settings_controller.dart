@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:pomodoro_countdown/controllers/file_controller.dart';
 import 'countdown_controller.dart';
 
 import '../jsons/json_converters.dart';
@@ -67,8 +68,23 @@ class SettingsController extends GetxController {
       if (currentUser!.name == 'admin' && currentUser!.password == 'pass') {
         currentUser?.isAdmin = true;
         isCurrentUserAdmin.value = true;
+        readUsers();
       }
       checkAdminUser(currentUser!);
+    }
+  }
+
+  readUsers() {
+    List? listUsersString = box.read('users');
+    if (listUsersString != null && listUsersString.isNotEmpty) {
+      for (String userString in listUsersString) {
+        User user = User.fromJson(jsonDecode(userString));
+        listUsers.add(user);
+      }
+    }
+    logger.d(listUsers);
+    for (User user in listUsers) {
+      logger.d(user.name);
     }
   }
 
@@ -77,6 +93,13 @@ class SettingsController extends GetxController {
       return false;
     } else {
       listUsers.add(user);
+      List<String> listUserString = [];
+      for (User user in listUsers) {
+        listUserString.add(jsonEncode(user.toJson()));
+      }
+      FileController _fileController = Get.find();
+      logger.d(listUserString);
+      _fileController.saveUsers(listUserString);
       return true;
     }
   }
@@ -98,6 +121,7 @@ class SettingsController extends GetxController {
       currentUser = user;
       saveCurrentUser();
       isCurrentUserAdmin.value = true;
+      readUsers();
     } else {
       currentUser?.isAdmin = false;
       isCurrentUserAdmin.value = false;
@@ -108,6 +132,9 @@ class SettingsController extends GetxController {
     if (currentUser != null) {
       box.write('nameUser', currentUser!.name);
       box.write('passUser', currentUser!.password);
+    } else {
+      box.remove('nameUser');
+      box.remove('passUser');
     }
   }
 

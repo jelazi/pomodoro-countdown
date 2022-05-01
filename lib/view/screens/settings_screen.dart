@@ -196,6 +196,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ElevatedButton(
           onPressed: () {
             _settingsController.logIn.value = false;
+            _settingsController.currentUser = null;
+            _settingsController.saveCurrentUser();
             Navigator.of(Get.overlayContext!).pop();
           },
           child: Text('yes'.tr),
