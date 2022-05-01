@@ -82,10 +82,6 @@ class SettingsController extends GetxController {
         listUsers.add(user);
       }
     }
-    logger.d(listUsers);
-    for (User user in listUsers) {
-      logger.d(user.name);
-    }
   }
 
   bool addNewUser(User user) {
@@ -98,7 +94,6 @@ class SettingsController extends GetxController {
         listUserString.add(jsonEncode(user.toJson()));
       }
       FileController _fileController = Get.find();
-      logger.d(listUserString);
       _fileController.saveUsers(listUserString);
       return true;
     }

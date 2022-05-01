@@ -45,23 +45,45 @@ class _PomodoroDrawerState extends State<PomodoroDrawer> {
                     visible: _settingsController.logIn.value,
                     child: Center(
                       child: SizedBox(
-                        width: 200,
-                        height: 200,
-                        child: PieChart(
-                          ringStrokeWidth: 15,
-                          dataMap: widget.dataMap,
-                          chartType: ChartType.ring,
-                          baseChartColor: Colors.grey,
-                          colorList: colorList,
-                          chartValuesOptions: const ChartValuesOptions(
-                            showChartValuesInPercentage: true,
-                          ),
-                          emptyColor: Colors.white,
-                          totalValue: widget._projectsController
-                              .currentProjectTotalValue.value,
-                          legendOptions: const LegendOptions(
-                              legendTextStyle: TextStyle(color: Colors.white),
-                              legendPosition: LegendPosition.bottom),
+                        height: 300,
+                        width: 300,
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 100,
+                              child: PieChart(
+                                ringStrokeWidth: 15,
+                                dataMap: widget.dataMap,
+                                chartType: ChartType.ring,
+                                baseChartColor: Colors.grey,
+                                colorList: colorList,
+                                chartValuesOptions: const ChartValuesOptions(
+                                  showChartValuesInPercentage: true,
+                                ),
+                                emptyColor: Colors.white,
+                                totalValue: widget._projectsController
+                                    .currentProjectTotalValue.value,
+                                legendOptions: const LegendOptions(
+                                    showLegends: false,
+                                    legendTextStyle:
+                                        TextStyle(color: Colors.white),
+                                    legendPosition: LegendPosition.bottom),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                bottom: 8.0,
+                                top: 10,
+                              ),
+                              child: Text(
+                                widget._projectsController.currentProjectName
+                                    .value,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            )
+                          ],
                         ),
                       ),
                     ),
