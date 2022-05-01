@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pie_chart/pie_chart.dart';
+import 'package:pomodoro_countdown/view/screens/projects_screen.dart';
 import '../../controllers/settings_controller.dart';
 
 import '../screens/add_project.dart';
@@ -137,6 +138,24 @@ class _PomodoroDrawerState extends State<PomodoroDrawer> {
               onTap: () {
                 Navigator.pop(context);
                 Get.dialog(AddProject());
+              },
+            ),
+          ),
+          Visibility(
+            visible: _settingsController.logIn.value,
+            child: ListTile(
+              tileColor: Colors.white24,
+              title: Text(
+                'selectProject'.tr,
+                style: const TextStyle(color: Colors.white),
+              ),
+              leading: const Icon(
+                Icons.edit_location,
+                color: Colors.white,
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                Get.to(ProjectsScreen());
               },
             ),
           ),

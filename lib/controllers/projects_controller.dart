@@ -106,6 +106,16 @@ class ProjectsController extends GetxController {
     return projects.map((e) => e.nameProject).toList();
   }
 
+  List<Project> getListByUser(String nameUser) {
+    List<Project> projectByUser = [];
+    for (Project project in projects) {
+      if (project.user == nameUser) {
+        projectByUser.add(project);
+      }
+    }
+    return projectByUser;
+  }
+
   RxString get currentProjectName {
     if (currentProject != null) {
       return ('project'.tr + currentProject!.nameProject).obs;
