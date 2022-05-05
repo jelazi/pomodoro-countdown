@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
+import '../others/logger.dart';
+
 class CustomTimerPainter extends CustomPainter {
   CustomTimerPainter({
     required this.animation,

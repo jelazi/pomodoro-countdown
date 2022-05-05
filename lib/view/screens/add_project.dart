@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import '../../controllers/countdown_controller.dart';
 import '../../controllers/projects_controller.dart';
 import '../../controllers/settings_controller.dart';
 import '../dialogs_snackbars/my_snack_bar.dart';
@@ -173,6 +174,9 @@ class _AddProjectState extends State<AddProject> {
     _projectsController.newProject(
         nameProject, _settingsController.currentUser?.name ?? '',
         scheduledTime: duration);
+    CountDownController countDownController = Get.find();
+    countDownController.resetValues();
+    countDownController.currentRoundNumber.value = 0;
     Navigator.of(Get.overlayContext!).pop();
     MySnackBar.warningSnackBar(
         'newProject'.tr, 'Project $nameProject  created.'.tr);

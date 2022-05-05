@@ -1,18 +1,24 @@
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:uuid/uuid.dart';
 part 'project.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class Project {
   String nameProject;
   String user;
-  Duration scheduledTime = const Duration(days: 1000);
+  late String id;
+  Duration totalTime = const Duration(days: 1000);
   Duration elapsedTime = const Duration();
 
   Project({
     required this.nameProject,
     required this.user,
-    this.scheduledTime = const Duration(),
-  });
+    this.totalTime = const Duration(),
+  }) {
+    var uuid = const Uuid();
+    id = uuid.v1();
+  }
 
   addTime(int seconds) {
     Duration time = Duration(seconds: seconds);

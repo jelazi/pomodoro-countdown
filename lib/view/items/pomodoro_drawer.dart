@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pie_chart/pie_chart.dart';
+import 'package:pomodoro_countdown/models/project.dart';
 import 'package:pomodoro_countdown/view/screens/projects_screen.dart';
 import '../../controllers/settings_controller.dart';
 
@@ -10,13 +11,8 @@ import '../screens/new_user_dialog.dart';
 import '../screens/settings_screen.dart';
 
 class PomodoroDrawer extends StatefulWidget {
-  PomodoroDrawer() {
-    dataMap[_projectsController.currentProjectName.value] =
-        _projectsController.currentProjectElaspsedValue.value;
-  }
+  PomodoroDrawer() {}
   final ProjectsController _projectsController = Get.find();
-
-  var dataMap = <String, double>{};
 
   @override
   State<PomodoroDrawer> createState() => _PomodoroDrawerState();
@@ -24,6 +20,7 @@ class PomodoroDrawer extends StatefulWidget {
 
 class _PomodoroDrawerState extends State<PomodoroDrawer> {
   final SettingsController _settingsController = Get.find();
+  final ProjectsController _projectsController = Get.find();
   final colorList = <Color>[
     Colors.red,
   ];
@@ -43,7 +40,8 @@ class _PomodoroDrawerState extends State<PomodoroDrawer> {
               children: [
                 Obx(
                   () => Visibility(
-                    visible: _settingsController.logIn.value,
+                    visible: _settingsController.logIn.value &&
+                        _projectsController.currentProject != null,
                     child: Center(
                       child: SizedBox(
                         height: 300,
@@ -54,7 +52,8 @@ class _PomodoroDrawerState extends State<PomodoroDrawer> {
                               height: 100,
                               child: PieChart(
                                 ringStrokeWidth: 15,
-                                dataMap: widget.dataMap,
+                                dataMap:
+                                    widget._projectsController.dataMapPieChart,
                                 chartType: ChartType.ring,
                                 baseChartColor: Colors.grey,
                                 colorList: colorList,
@@ -91,7 +90,8 @@ class _PomodoroDrawerState extends State<PomodoroDrawer> {
                   ),
                 ),
                 Visibility(
-                  visible: !_settingsController.logIn.value,
+                  visible: !_settingsController.logIn.value ||
+                      _projectsController.currentProject == null,
                   child: const Center(
                     child: SizedBox(
                       width: 100,
@@ -114,7 +114,7 @@ class _PomodoroDrawerState extends State<PomodoroDrawer> {
                 style: const TextStyle(color: Colors.white),
               ),
               leading: const Icon(
-                Icons.add,
+                Icons.supervised_user_circle,
                 color: Colors.white,
               ),
               onTap: () {

@@ -49,16 +49,11 @@ class CountDownController extends GetxController {
   Timer? finishedTimer;
   RxList<Rx<stateRound>> listRounds = RxList();
   bool isFromPause = false;
-
-  RxString get currentTypeRoundString {
-    if (currentRoundType == typeRound.working) {
-      return ('working'.tr).obs;
-    }
-    return ('breaking'.tr).obs;
-  }
+  RxString currentTypeRoundString = RxString('');
 
   createAnimationController(TickerProvider ticker) {
     currentRoundType = typeRound.working;
+    _changeCurrentRoundTypeString();
     tickerProvider = ticker;
     currentRoundSeconds.value = currentRoundType == typeRound.working
         ? _settingsController.secondsWork.value
@@ -70,6 +65,7 @@ class CountDownController extends GetxController {
       vsync: tickerProvider,
       duration: currentDuration,
     );
+    logger.d(controller.value);
     painter = CustomTimerPainter(
       animation: controller,
       color: Colors.red,
@@ -82,6 +78,7 @@ class CountDownController extends GetxController {
 
   resetValues() {
     currentRoundType = typeRound.working;
+    _changeCurrentRoundTypeString();
     currentRoundSeconds.value = currentRoundType == typeRound.working
         ? _settingsController.secondsWork.value
         : currentRoundNumber.value < _settingsController.rounds.value
@@ -96,6 +93,7 @@ class CountDownController extends GetxController {
       animation: controller,
       color: Colors.red,
     );
+    logger.d(controller.value);
     timerString.value =
         '${currentDuration.inMinutes}:${(currentDuration.inSeconds % 60).toString().padLeft(2, '0')}';
     listRounds.value = List.generate(
@@ -171,7 +169,16 @@ class CountDownController extends GetxController {
     _changedTextStartPaused(stateCount.value);
   }
 
+  _changeCurrentRoundTypeString() {
+    if (currentRoundType == typeRound.working) {
+      currentTypeRoundString.value = 'working'.tr;
+    } else {
+      currentTypeRoundString.value = 'breaking'.tr;
+    }
+  }
+
   _endRound(bool isNormalStop) {
+    logger.d('here');
     isFromPause = false;
     if (currentRoundType == typeRound.working) {
       _ringController.playStopWorking();
@@ -198,6 +205,7 @@ class CountDownController extends GetxController {
     currentRoundType = currentRoundType == typeRound.working
         ? typeRound.breaking
         : typeRound.working;
+    _changeCurrentRoundTypeString();
     if (currentRoundNumber.value == _settingsController.rounds.value &&
         currentRoundType == typeRound.breaking) {
       currentRoundSeconds.value =
@@ -213,10 +221,7 @@ class CountDownController extends GetxController {
     timerString.value =
         '${currentDuration.inMinutes}:${(currentDuration.inSeconds % 60).toString().padLeft(2, '0')}';
     controller.duration = currentDuration;
-    currentTypeRoundString.value =
-        (currentTypeRoundString.value == 'working'.tr)
-            ? 'breaking'.tr
-            : 'working'.tr;
+    _changeCurrentRoundTypeString();
     finishedTimer = Timer.periodic(
         Duration(
             seconds: _settingsController.durationPeriodFinishedWarning.value),

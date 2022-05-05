@@ -8,16 +8,53 @@ import '../view/dialogs_snackbars/my_snack_bar.dart';
 
 import '../models/project.dart';
 import '../others/logger.dart';
+import 'settings_controller.dart';
 
 class ProjectsController extends GetxController {
   List<Project> projects = [];
   Duration scheduledTime = Duration();
   Project? currentProject;
-  FileController fileController = Get.find();
+  final FileController _fileController = Get.find();
+  final SettingsController _settingsController = Get.find();
+  RxString currentProjectName = RxString('');
+  RxDouble currentProjectTotalValue = RxDouble(0);
+  RxDouble currentProjectElaspsedValue = RxDouble(0);
+  var dataMapPieChart = <String, double>{}.obs;
 
   ProjectsController() {
-    addTestProject();
+    //  addTestProject();
+
+    loadProjects();
   }
+
+  loadProjects() {
+    String? jsonProject = _fileController.getProjects();
+    if (jsonProject != null && jsonProject.isNotEmpty) {
+      projects = listProjectFromJson(jsonProject);
+    }
+    if (_settingsController.currentUser != null) {
+      List<Project> listProjectUser =
+          getListByUser(_settingsController.currentUser?.name ?? '');
+      if (listProjectUser.isNotEmpty) {
+        selectProject(listProjectUser.first);
+      }
+    }
+  }
+
+  bool deleteProject(String idProject) {
+    logger.d(idProject);
+    if (currentProject?.id == idProject) {
+      currentProject = null;
+      currentProjectName.value = '';
+      currentProjectTotalValue.value = 0;
+      currentProjectElaspsedValue.value = 0;
+    }
+    if (!projects.any((element) => element.id == idProject)) return false;
+    projects.removeWhere((element) => element.id == idProject);
+    _fileController.saveProjects(listProjectsToJson(projects));
+    return true;
+  }
+
   bool newProject(String nameProject, String userName,
       {Duration scheduledTime = const Duration()}) {
     if (projects.any((element) => element.nameProject == nameProject)) {
@@ -30,14 +67,23 @@ class ProjectsController extends GetxController {
       newProject = Project(
         nameProject: nameProject,
         user: userName,
-        scheduledTime: scheduledTime,
+        totalTime: scheduledTime,
       );
     }
     projects.add(newProject);
-    currentProject = newProject;
+    selectProject(newProject);
 
-    fileController.saveProjects(listProjectsToJson(projects));
+    _fileController.saveProjects(listProjectsToJson(projects));
     return true;
+  }
+
+  selectProject(Project project) {
+    currentProject = project;
+    currentProjectName.value = project.nameProject;
+    currentProjectElaspsedValue.value =
+        project.elapsedTime.inMinutes.toDouble();
+    currentProjectTotalValue.value = project.totalTime.inMinutes.toDouble();
+    dataMapPieChart['elapsed'] = project.elapsedTime.inMinutes.toDouble();
   }
 
   bool existsNameProject(String newName) {
@@ -56,7 +102,7 @@ class ProjectsController extends GetxController {
           'addDuration1'.tr +
               duration.inMinutes.toString() +
               'addDuration2'.tr);
-      fileController.saveProjects(listProjectsToJson(projects));
+      _fileController.saveProjects(listProjectsToJson(projects));
     }
   }
 
@@ -85,17 +131,21 @@ class ProjectsController extends GetxController {
   }
 
   addTestProject() {
-    Project testProject = Project(nameProject: 'Test project', user: 'me');
-    testProject.scheduledTime = const Duration(minutes: 50);
+    Project testProject = Project(nameProject: 'Test project', user: 'admin');
+    testProject.totalTime = const Duration(minutes: 50);
     testProject.elapsedTime = const Duration(minutes: 10);
     projects.add(testProject);
-    currentProject = testProject;
+    Project test2Project = Project(nameProject: 'Test project2', user: 'admin');
+    test2Project.totalTime = const Duration(minutes: 80);
+    test2Project.elapsedTime = const Duration(minutes: 70);
+    projects.add(test2Project);
+    selectProject(testProject);
   }
 
   bool setCurrentProjectByName(String nameProject) {
     projects.map((e) {
       if (e.nameProject == nameProject) {
-        currentProject = e;
+        selectProject(e);
         return true;
       }
     });
@@ -114,27 +164,5 @@ class ProjectsController extends GetxController {
       }
     }
     return projectByUser;
-  }
-
-  RxString get currentProjectName {
-    if (currentProject != null) {
-      return ('project'.tr + currentProject!.nameProject).obs;
-    }
-    String emptyProject = 'emptyProject'.tr;
-    return RxString(emptyProject);
-  }
-
-  RxDouble get currentProjectTotalValue {
-    if (currentProject != null) {
-      return (currentProject!.scheduledTime.inMinutes.toDouble()).obs;
-    }
-    return 20.0.obs;
-  }
-
-  RxDouble get currentProjectElaspsedValue {
-    if (currentProject != null) {
-      return (currentProject!.elapsedTime.inMinutes.toDouble()).obs;
-    }
-    return 0.0.obs;
   }
 }

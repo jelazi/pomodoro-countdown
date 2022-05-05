@@ -39,12 +39,18 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                         widget._settingsController.currentUser?.name ?? '')
                     .length,
                 itemBuilder: (context, index) {
-                  return CardProject(widget._projectsController.getListByUser(
-                      widget._settingsController.currentUser?.name ??
-                          '')[index]);
+                  return CardProject(
+                      widget._projectsController.getListByUser(
+                          widget._settingsController.currentUser?.name ??
+                              '')[index],
+                      reload);
                 },
               ),
       ),
     );
+  }
+
+  reload() {
+    setState(() {});
   }
 }

@@ -80,6 +80,9 @@ class Languages extends Translations {
           'addDurationTitle': ' Přidání času do projektu.',
           'addDuration1': ' Do projektu bylo přidáno ',
           'addDuration2': '  minut.',
+          'selectProject': 'Výběr projektu',
+          'selectProjectTitle': 'Výběr projektu',
+          'newProject': 'Nový projekt',
         },
         'en_US': {
           'start': 'Start',
@@ -156,6 +159,8 @@ class Languages extends Translations {
           'addDurationTitle': 'Add duration to the project.',
           'addDuration1': ' Has been added ',
           'addDuration2': '  minutes to the project.',
+          'selectProject': 'Select project',
+          'selectProjectTitle': 'Select project',
         }
       };
 }
