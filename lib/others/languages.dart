@@ -83,6 +83,9 @@ class Languages extends Translations {
           'selectProject': 'Výběr projektu',
           'selectProjectTitle': 'Výběr projektu',
           'newProject': 'Nový projekt',
+          'remain': 'Zbývá: ',
+          'deleteProject': 'Vymazání projektu',
+          'questionDeleteProject': 'Chcete vymazat tento projekt?',
         },
         'en_US': {
           'start': 'Start',

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pie_chart/pie_chart.dart';
-import 'package:pomodoro_countdown/controllers/countdown_controller.dart';
-import 'package:pomodoro_countdown/controllers/projects_controller.dart';
-import 'package:pomodoro_countdown/view/dialogs_snackbars/my_snack_bar.dart';
+import 'package:pomodoro_countdown/view/dialogs_snackbars/question_dialog.dart';
+import '../../controllers/countdown_controller.dart';
+import '../../controllers/projects_controller.dart';
+import '../dialogs_snackbars/my_snack_bar.dart';
 
 import '../../models/project.dart';
 import '../../others/logger.dart';
@@ -32,19 +33,32 @@ class _CardProjectState extends State<CardProject> {
       onTap: openProject,
       child: Dismissible(
         key: UniqueKey(),
-        background: Container(color: Colors.blue),
+        background: Container(
+          color: Colors.red,
+          child: const Align(
+            alignment: Alignment.centerRight,
+            child: Padding(
+              padding: EdgeInsets.only(
+                right: 20.0,
+              ),
+              child: IconButton(
+                icon: Icon(
+                  Icons.delete,
+                  color: Colors.white,
+                  size: 50,
+                ),
+                onPressed: null,
+              ),
+            ),
+          ),
+        ),
         direction: DismissDirection.endToStart,
-        onDismissed: (direction) {
-          setState(() {
-            _projectsController.deleteProject(widget.project.id);
-            widget.reload();
-            MySnackBar.warningSnackBar('Deleting project',
-                'Project ${widget.project.nameProject} is deleted.');
-          });
+        confirmDismiss: (DismissDirection direction) async {
+          deleteProjectDialog();
         },
         child: Card(
           elevation: 50,
-          color: Colors.red,
+          color: const Color.fromARGB(255, 17, 89, 177),
           child: SizedBox(
             height: 100,
             child: Padding(
@@ -72,6 +86,7 @@ class _CardProjectState extends State<CardProject> {
                         child: Expanded(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Text(
                                 widget.project.totalTime.inMinutes.toString() +
@@ -82,15 +97,20 @@ class _CardProjectState extends State<CardProject> {
                                   fontSize: 15,
                                 ),
                               ),
+                              const SizedBox(
+                                width: 20,
+                              ),
                               Text(
                                 'remain'.tr +
-                                    widget.project.elapsedTime.inMinutes
+                                    (widget.project.totalTime.inMinutes -
+                                            widget
+                                                .project.elapsedTime.inMinutes)
                                         .toString() +
                                     'minutes'.tr,
                                 style: GoogleFonts.lato(
                                   fontWeight: FontWeight.w500,
                                   color: Colors.white,
-                                  fontSize: 10,
+                                  fontSize: 12,
                                 ),
                               ),
                             ],
@@ -125,6 +145,20 @@ class _CardProjectState extends State<CardProject> {
         ),
       ),
     );
+  }
+
+  deleteProjectDialog() {
+    Get.dialog(QuestionDialog('deleteProject'.tr, 'questionDeleteProject'.tr,
+        'yes'.tr, 'no'.tr, deleteProject));
+  }
+
+  deleteProject() async {
+    setState(() {
+      _projectsController.deleteProject(widget.project.id);
+      widget.reload();
+      MySnackBar.warningSnackBar('Deleting project',
+          'Project ${widget.project.nameProject} is deleted.');
+    });
   }
 
   openProject() {

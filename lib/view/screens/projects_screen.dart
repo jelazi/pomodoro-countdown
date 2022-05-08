@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../controllers/projects_controller.dart';
 import '../../controllers/settings_controller.dart';
 import '../items/card_project.dart';
+import 'add_project.dart';
 
 class ProjectsScreen extends StatefulWidget {
   final SettingsController _settingsController = Get.find();
@@ -21,6 +22,14 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
       appBar: AppBar(
         title: Text('selectProjectTitle'.tr),
       ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          setState(() {
+            Get.dialog(const AddProject());
+          });
+        },
+      ),
       body: Container(
         child: widget._projectsController
                 .getListByUser(
@@ -31,18 +40,21 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                 'There is not Project for current users',
                 style: TextStyle(color: Colors.white, fontSize: 15),
               ))
-            : ListView.builder(
-                itemCount: widget._projectsController
-                    .getListByUser(
-                        widget._settingsController.currentUser?.name ?? '')
-                    .length,
-                itemBuilder: (context, index) {
-                  return CardProject(
-                      widget._projectsController.getListByUser(
-                          widget._settingsController.currentUser?.name ??
-                              '')[index],
-                      reload);
-                },
+            : Obx(
+                (() => ListView.builder(
+                      itemCount: widget._projectsController
+                          .getListByUser(
+                              widget._settingsController.currentUser?.name ??
+                                  '')
+                          .length,
+                      itemBuilder: (context, index) {
+                        return CardProject(
+                            widget._projectsController.getListByUser(
+                                widget._settingsController.currentUser?.name ??
+                                    '')[index],
+                            reload);
+                      },
+                    )),
               ),
       ),
     );

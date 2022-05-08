@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pie_chart/pie_chart.dart';
-import 'package:pomodoro_countdown/view/screens/projects_screen.dart';
+import '../screens/projects_screen.dart';
 import '../../controllers/settings_controller.dart';
 
 import '../screens/add_project.dart';

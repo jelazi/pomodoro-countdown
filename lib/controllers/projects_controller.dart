@@ -8,7 +8,7 @@ import '../others/logger.dart';
 import 'settings_controller.dart';
 
 class ProjectsController extends GetxController {
-  List<Project> projects = [];
+  RxList<Project> projects = RxList();
   Duration scheduledTime = const Duration();
   Project? currentProject;
   final FileController _fileController = Get.find();
@@ -27,7 +27,7 @@ class ProjectsController extends GetxController {
   loadProjects() {
     String? jsonProject = _fileController.getProjects();
     if (jsonProject != null && jsonProject.isNotEmpty) {
-      projects = listProjectFromJson(jsonProject);
+      projects.value = listProjectFromJson(jsonProject);
     }
     if (_settingsController.currentUser != null) {
       List<Project> listProjectUser =
