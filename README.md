@@ -36,7 +36,7 @@ You can :<br/>
 </div>
 
 ### Projects screen
-<img src="/screenshots/Screenshot_projects_screen.png" width="80" height="150" />
+![]('/screenshots/Screenshot_projects_screen.png'){width=80px}
 
 ### Settings screen
 <img src="/screenshots/Screenshot_settings.png" width="80" height="150" />
