@@ -31,7 +31,7 @@ You can :
 ## Screenshots
 
 ### Main screen
-![main screen](/screenshots/Screenshot_main_screen.png =150x400)
+<img src="/screenshots/Screenshot_main_screen.png" width="150" height="400" />
 
 ### Projects screen
 ![projects screen](/screenshots/Screenshot_projects_screen.png =150x400)
