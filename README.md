@@ -1,4 +1,4 @@
-# pomodoro_countdown
+# Pomodoro Countdown
 
 Aplication for pomodoro technique (https://en.wikipedia.org/wiki/Pomodoro_Technique) in flutter. 
 
@@ -14,18 +14,18 @@ flutter pub run build_runner build --delete-conflicting-outputs
 
 
 ## Features
-- Create and manage projects
-- add new user
-- play rings
-- stop round before end time, pause round
+- Create and manage projects<br/>
+- add new user<br/>
+- play rings<br/>
+- stop round before end time, pause round<br/>
 
 ### Settings
-You can :
-- change time working, time breaking, number of rounds...
-- login to your account
-- login to admin for creating new acounts (user: admin, password: pass)
-- allow various warnings
-- allow warning app rings 
+You can :<br/>
+- change time working, time breaking, number of rounds...<br/>
+- login to your account<br/>
+- login to admin for creating new acounts (user: admin, password: pass)<br/>
+- allow various warnings<br/>
+- allow warning app rings <br/>
 
 
 ## Screenshots
