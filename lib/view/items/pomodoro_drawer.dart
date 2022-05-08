@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pie_chart/pie_chart.dart';
-import 'package:pomodoro_countdown/models/project.dart';
 import 'package:pomodoro_countdown/view/screens/projects_screen.dart';
 import '../../controllers/settings_controller.dart';
 
@@ -11,8 +10,9 @@ import '../screens/new_user_dialog.dart';
 import '../screens/settings_screen.dart';
 
 class PomodoroDrawer extends StatefulWidget {
-  PomodoroDrawer() {}
   final ProjectsController _projectsController = Get.find();
+
+  PomodoroDrawer({Key? key}) : super(key: key);
 
   @override
   State<PomodoroDrawer> createState() => _PomodoroDrawerState();
@@ -78,7 +78,7 @@ class _PomodoroDrawerState extends State<PomodoroDrawer> {
                               child: Text(
                                 widget._projectsController.currentProjectName
                                     .value,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                 ),
                               ),
@@ -119,7 +119,7 @@ class _PomodoroDrawerState extends State<PomodoroDrawer> {
               ),
               onTap: () {
                 Navigator.pop(context);
-                Get.dialog(NewUserDialog());
+                Get.dialog(const NewUserDialog());
               },
             ),
           ),
@@ -137,7 +137,7 @@ class _PomodoroDrawerState extends State<PomodoroDrawer> {
               ),
               onTap: () {
                 Navigator.pop(context);
-                Get.dialog(AddProject());
+                Get.dialog(const AddProject());
               },
             ),
           ),
@@ -169,8 +169,10 @@ class _PomodoroDrawerState extends State<PomodoroDrawer> {
             ),
             onTap: () {
               Navigator.pop(context);
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SettingsScreen()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const SettingsScreen()));
             },
           ),
           ListTile(
@@ -181,7 +183,7 @@ class _PomodoroDrawerState extends State<PomodoroDrawer> {
               color: Colors.white,
             ),
             onTap: () {
-              // TODO:Update the state of the app.
+              // TODO: synchronization by firebase.
               // ...
             },
           ),

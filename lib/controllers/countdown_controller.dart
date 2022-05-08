@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pausable_timer/pausable_timer.dart';
@@ -152,7 +151,7 @@ class CountDownController extends GetxController {
         finishedTimer?.cancel();
       }
       timer.start();
-    } else if (stateCount == stateCountdown.play) {
+    } else if (stateCount.value == stateCountdown.play) {
       isFromPause = true;
       stateCount.value = stateCountdown.pause;
       timer.pause();
@@ -192,9 +191,10 @@ class CountDownController extends GetxController {
 
       if (currentRoundNumber.value > _settingsController.rounds.value) {
         currentRoundNumber.value = 0;
-        listRounds.forEach((element) {
-          element.value = stateRound.undone;
-        });
+
+        for (var i = 0; i < listRounds.length; i++) {
+          listRounds[i].value = stateRound.undone;
+        }
       }
     } else {
       if (isNormalStop) {

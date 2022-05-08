@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -40,13 +42,13 @@ class MyApp extends StatelessWidget {
       ),
       translations: Languages(),
       locale: _settingsController.language,
-      home: MyHomePage(),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage();
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -61,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text('Pomodoro countdown'.tr),
       ),
       drawer: PomodoroDrawer(),
-      body: MainScreen(),
+      body: const MainScreen(),
     );
   }
 }

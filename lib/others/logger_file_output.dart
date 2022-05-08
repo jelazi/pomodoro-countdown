@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:logger/logger.dart';
@@ -37,7 +38,7 @@ class LoggerFileOutput extends LogOutput {
       }
     } else {
       for (var line in event.lines) {
-        print(line);
+        log(line);
       }
     }
   }

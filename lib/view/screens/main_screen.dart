@@ -7,7 +7,7 @@ import '../buttons/start_stop_group_buttons.dart';
 import '../items/tomato_icon.dart';
 
 class MainScreen extends StatefulWidget {
-  MainScreen();
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -153,7 +153,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                             ),
                           ),
                         ),
-                        Expanded(
+                        const Expanded(
                           flex: 20,
                           child: StartStopGroupButton(),
                         ),

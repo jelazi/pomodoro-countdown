@@ -135,9 +135,9 @@ class SettingsController extends GetxController {
 
   Locale get language {
     if (nameLanguage.value == 'cs') {
-      return Locale('cs_Cz');
+      return const Locale('cs_Cz');
     } else {
-      return Locale('en_Us');
+      return const Locale('en_Us');
     }
   }
 

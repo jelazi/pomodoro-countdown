@@ -22,6 +22,7 @@ class RxListConverter implements JsonConverter<RxList, List> {
   }
 
   @override
+  // ignore: invalid_use_of_protected_member
   List toJson(RxList list) => list.value;
 }
 

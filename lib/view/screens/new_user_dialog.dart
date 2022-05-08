@@ -6,7 +6,7 @@ import '../../controllers/settings_controller.dart';
 import '../dialogs_snackbars/my_snack_bar.dart';
 
 class NewUserDialog extends StatefulWidget {
-  NewUserDialog({Key? key}) : super(key: key);
+  const NewUserDialog({Key? key}) : super(key: key);
 
   @override
   State<NewUserDialog> createState() => _NewUserDialogState();
@@ -24,7 +24,8 @@ class _NewUserDialogState extends State<NewUserDialog> {
     return AlertDialog(
       backgroundColor: Colors.black,
       insetPadding: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(side: BorderSide(color: Colors.white)),
+      shape:
+          const RoundedRectangleBorder(side: BorderSide(color: Colors.white)),
       content: SizedBox(
         height: 250,
         width: 300,
@@ -39,7 +40,7 @@ class _NewUserDialogState extends State<NewUserDialog> {
                   Expanded(
                     child: Text(
                       'nameUser'.tr,
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     ),
                   ),
                   Expanded(
@@ -86,7 +87,7 @@ class _NewUserDialogState extends State<NewUserDialog> {
                   Expanded(
                     child: Text(
                       'passUser'.tr,
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     ),
                   ),
                   Expanded(

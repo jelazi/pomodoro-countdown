@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-import '../others/logger.dart';
-
 class CustomTimerPainter extends CustomPainter {
   CustomTimerPainter({
     required this.animation,
@@ -26,7 +24,8 @@ class CustomTimerPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CustomTimerPainter old) {
-    return animation.value != old.animation.value || color != old.color;
+  bool shouldRepaint(CustomTimerPainter oldDelegate) {
+    return animation.value != oldDelegate.animation.value ||
+        color != oldDelegate.color;
   }
 }

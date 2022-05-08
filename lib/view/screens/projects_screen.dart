@@ -4,11 +4,9 @@ import '../../controllers/projects_controller.dart';
 import '../../controllers/settings_controller.dart';
 import '../items/card_project.dart';
 
-import '../../models/project.dart';
-
 class ProjectsScreen extends StatefulWidget {
-  SettingsController _settingsController = Get.find();
-  ProjectsController _projectsController = Get.find();
+  final SettingsController _settingsController = Get.find();
+  final ProjectsController _projectsController = Get.find();
   ProjectsScreen({Key? key}) : super(key: key);
 
   @override

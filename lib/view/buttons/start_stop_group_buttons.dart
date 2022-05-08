@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../../controllers/countdown_controller.dart';
 
 class StartStopGroupButton extends StatefulWidget {
-  StartStopGroupButton();
+  const StartStopGroupButton({Key? key}) : super(key: key);
 
   @override
   State<StartStopGroupButton> createState() => _StartStopGroupButtonState();

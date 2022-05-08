@@ -7,7 +7,7 @@ import '../../controllers/settings_controller.dart';
 import '../dialogs_snackbars/my_snack_bar.dart';
 
 class AddProject extends StatefulWidget {
-  AddProject({Key? key}) : super(key: key);
+  const AddProject({Key? key}) : super(key: key);
 
   @override
   State<AddProject> createState() => _AddProjectState();
@@ -27,7 +27,8 @@ class _AddProjectState extends State<AddProject> {
     return AlertDialog(
       backgroundColor: Colors.black,
       insetPadding: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(side: BorderSide(color: Colors.white)),
+      shape:
+          const RoundedRectangleBorder(side: BorderSide(color: Colors.white)),
       content: SizedBox(
         height: 250,
         width: 300,
@@ -42,7 +43,7 @@ class _AddProjectState extends State<AddProject> {
                   Expanded(
                     child: Text(
                       'nameProject'.tr,
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     ),
                   ),
                   Expanded(
@@ -157,7 +158,7 @@ class _AddProjectState extends State<AddProject> {
   }
 
   addProject() {
-    Duration duration = Duration();
+    Duration duration = const Duration();
     if (durationMinutes > 45) {
       duration = Duration(minutes: durationMinutes);
     } else {

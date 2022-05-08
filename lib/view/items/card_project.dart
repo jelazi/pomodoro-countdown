@@ -10,10 +10,10 @@ import '../../models/project.dart';
 import '../../others/logger.dart';
 
 class CardProject extends StatefulWidget {
-  Project project;
-  var dataMap = <String, double>{};
-  Function reload;
-  CardProject(this.project, this.reload) {
+  final Project project;
+  final dataMap = <String, double>{};
+  final Function reload;
+  CardProject(this.project, this.reload, {Key? key}) : super(key: key) {
     dataMap[project.nameProject] = project.elapsedTime.inMinutes.toDouble();
   }
 
@@ -69,13 +69,31 @@ class _CardProjectState extends State<CardProject> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          widget.project.totalTime.inMinutes.toString() +
-                              'minutes'.tr,
-                          style: GoogleFonts.lato(
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                            fontSize: 15,
+                        child: Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Text(
+                                widget.project.totalTime.inMinutes.toString() +
+                                    'minutes'.tr,
+                                style: GoogleFonts.lato(
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              Text(
+                                'remain'.tr +
+                                    widget.project.elapsedTime.inMinutes
+                                        .toString() +
+                                    'minutes'.tr,
+                                style: GoogleFonts.lato(
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       )

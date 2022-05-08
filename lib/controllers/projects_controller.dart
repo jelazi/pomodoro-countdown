@@ -1,18 +1,15 @@
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'file_controller.dart';
-import '../view/dialogs_snackbars/my_snack_bar.dart';
 
+import '../view/dialogs_snackbars/my_snack_bar.dart';
 import '../models/project.dart';
 import '../others/logger.dart';
 import 'settings_controller.dart';
 
 class ProjectsController extends GetxController {
   List<Project> projects = [];
-  Duration scheduledTime = Duration();
+  Duration scheduledTime = const Duration();
   Project? currentProject;
   final FileController _fileController = Get.find();
   final SettingsController _settingsController = Get.find();
@@ -42,7 +39,6 @@ class ProjectsController extends GetxController {
   }
 
   bool deleteProject(String idProject) {
-    logger.d(idProject);
     if (currentProject?.id == idProject) {
       currentProject = null;
       currentProjectName.value = '';
