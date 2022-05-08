@@ -58,7 +58,7 @@ class _CardProjectState extends State<CardProject> {
         },
         child: Card(
           elevation: 50,
-          color: const Color.fromARGB(255, 17, 89, 177),
+          color: Color.fromARGB(255, 11, 133, 185),
           child: SizedBox(
             height: 100,
             child: Padding(
