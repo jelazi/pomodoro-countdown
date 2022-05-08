@@ -86,6 +86,7 @@ class Languages extends Translations {
           'remain': 'Zbývá: ',
           'deleteProject': 'Vymazání projektu',
           'questionDeleteProject': 'Chcete vymazat tento projekt?',
+          'putPassUser': 'Vlož heslo uživatele',
         },
         'en_US': {
           'start': 'Start',

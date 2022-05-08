@@ -25,7 +25,7 @@ class CardProject extends StatefulWidget {
 class _CardProjectState extends State<CardProject> {
   final ProjectsController _projectsController = Get.find();
   final colorList = <Color>[
-    Colors.grey,
+    Colors.red,
   ];
   @override
   Widget build(BuildContext context) {
