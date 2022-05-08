@@ -32,17 +32,17 @@ You can :<br/>
 
 ### Main screen
 <div>
-<img src="/screenshots/Screenshot_main_screen.png" width="80" height="150" />
+<img src="/screenshots/Screenshot_main_screen.png" width="50%" height="50%" />
 </div>
 
 ### Projects screen
-![]('/screenshots/Screenshot_projects_screen.png'){width=80px}
+<img src="/screenshots/Screenshot_projects_screen.png" width="50%" height="50%" />
 
 ### Settings screen
-<img src="/screenshots/Screenshot_settings.png" width="80" height="150" />
+<img src="/screenshots/Screenshot_settings.png" width="50%" height="50%" />
 
 ### Left drawer
-<img src="/screenshots/Screenshot_drawer.png" width="80" height="150" />
+<img src="/screenshots/Screenshot_drawer.png" width="50%" height="50%" />
 
 
 
