@@ -31,16 +31,17 @@ You can :
 ## Screenshots
 
 ### Main screen
-<img src="/screenshots/Screenshot_main_screen.png" width="150" height="400" />
+<img src="/screenshots/Screenshot_main_screen.png" width="80" height="150" />
 
 ### Projects screen
-![projects screen](/screenshots/Screenshot_projects_screen.png =150x400)
+<img src="/screenshots/Screenshot_projects_screen.png" width="80" height="150" />
 
 ### Settings screen
-![settings screen](/screenshots/Screenshot_settings.png =150x400)
+<img src="/screenshots/Screenshot_settings.png" width="80" height="150" />
 
 ### Left drawer
-![left drawe](/screenshots/Screenshot_drawer.png =150x400)
+<img src="/screenshots/Screenshot_drawer.png" width="80" height="150" />
+
 
 
 
