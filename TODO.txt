@@ -1,2 +1,6 @@
-TODO: notification in background
-TODO: only portrait mode
+TODO: notification in background - solution: https://stackoverflow.com/questions/41924890/how-do-i-run-code-in-the-background-even-with-the-screen-off
+
+
+TODO: custom sounds
+TODO: sync projects, users
+

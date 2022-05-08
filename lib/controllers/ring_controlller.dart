@@ -8,6 +8,8 @@ class RingController extends GetxController {
   RxString stopWorkingRing = RxString('assets/rings/applause.mp3');
   RxString startBreakingRing = RxString('assets/rings/laugh.mp3');
   RxString stopBreakingRing = RxString('assets/rings/applause.mp3');
+  RxString warningRing = RxString('assets/rings/small_ring.mp3');
+  AssetsAudioPlayer? audioPlayer;
 
   playStartWorking() {
     _playRing(startWorkingRing.value);
@@ -25,10 +27,15 @@ class RingController extends GetxController {
     _playRing(stopBreakingRing.value);
   }
 
+  playRingWarning() {
+    _playRing(warningRing.value);
+  }
+
   _playRing(String pathRing) async {
-    logger.d('playRing $pathRing');
-    AssetsAudioPlayer audioPlayer = AssetsAudioPlayer.newPlayer();
-    audioPlayer.open(
+    logger.v('playRing $pathRing');
+    audioPlayer?.stop();
+    audioPlayer = AssetsAudioPlayer.newPlayer();
+    audioPlayer?.open(
       Audio(pathRing),
       autoStart: true,
       showNotification: true,

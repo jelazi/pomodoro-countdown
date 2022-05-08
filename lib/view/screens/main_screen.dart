@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pomodoro_countdown/controllers/countdown_controller.dart';
-import 'package:pomodoro_countdown/view/buttons/start_stop_group_buttons.dart';
-import 'package:pomodoro_countdown/view/items/tomato_icon.dart';
+import '../../controllers/settings_controller.dart';
+import '../../controllers/countdown_controller.dart';
+import '../../controllers/projects_controller.dart';
+import '../buttons/start_stop_group_buttons.dart';
+import '../items/tomato_icon.dart';
 
 class MainScreen extends StatefulWidget {
-  MainScreen();
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -13,6 +15,8 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   final CountDownController _countDownController = Get.find();
+  final ProjectsController _projectsController = Get.find();
+  final SettingsController _settingsController = Get.find();
 
   @override
   void initState() {
@@ -22,7 +26,6 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData themeData = Theme.of(context);
     return Scaffold(
       backgroundColor: Colors.white10,
       body: Center(
@@ -32,40 +35,63 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               return Stack(
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Expanded(
-                          flex: 10,
+                          flex: 16,
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
                             child: Obx(
-                              () => Text(
-                                "Current Round: ".tr +
-                                    (_countDownController.currentRound.value +
-                                            1)
-                                        .toString(),
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: Colors.white,
-                                ),
+                              () => Column(
+                                children: [
+                                  Visibility(
+                                    visible: _settingsController.logIn.value,
+                                    child: Text(
+                                      _projectsController
+                                          .currentProjectName.value,
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        fontSize: 20.0,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: Text(
+                                      "round".tr +
+                                          (_countDownController
+                                                      .currentRoundNumber
+                                                      .value +
+                                                  1)
+                                              .toString(),
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        fontSize: 20.0,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                         ),
                         Expanded(
-                          flex: 15,
+                          flex: 16,
                           child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: _countDownController.listRounds
-                                  .map(
-                                    (e) => TomatoIcon(e),
-                                  )
-                                  .toList(),
+                            padding: const EdgeInsets.all(8.0),
+                            child: Obx(
+                              () => Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: _countDownController.listRounds
+                                    .map(
+                                      (e) => TomatoIcon(e),
+                                    )
+                                    .toList(),
+                              ),
                             ),
                           ),
                         ),
@@ -96,7 +122,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                                             () => Text(
                                               _countDownController
                                                   .timerString.value,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 40.0,
                                                   color: Colors.white),
                                             ),
@@ -119,7 +145,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                                 _countDownController
                                     .currentTypeRoundString.value,
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 20.0,
                                   color: Colors.white,
                                 ),
@@ -127,7 +153,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                             ),
                           ),
                         ),
-                        Expanded(
+                        const Expanded(
                           flex: 20,
                           child: StartStopGroupButton(),
                         ),

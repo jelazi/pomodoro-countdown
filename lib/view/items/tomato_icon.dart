@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import '../../controllers/countdown_controller.dart';
 
 class TomatoIcon extends StatefulWidget {
-  Rx<stateRound> state;
-  TomatoIcon(this.state);
+  final Rx<stateRound> state;
+  const TomatoIcon(this.state, {Key? key}) : super(key: key);
 
   @override
   State<TomatoIcon> createState() => _TomatoIconState();
