@@ -31,7 +31,9 @@ You can :<br/>
 ## Screenshots
 
 ### Main screen
+<div>
 <img src="/screenshots/Screenshot_main_screen.png" width="80" height="150" />
+</div>
 
 ### Projects screen
 <img src="/screenshots/Screenshot_projects_screen.png" width="80" height="150" />
