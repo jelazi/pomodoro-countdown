@@ -165,6 +165,11 @@ class Languages extends Translations {
           'addDuration2': '  minutes to the project.',
           'selectProject': 'Select project',
           'selectProjectTitle': 'Select project',
+          'newProject': 'New project',
+          'remain': 'Remain: ',
+          'deleteProject': 'Delete project',
+          'questionDeleteProject': 'Do you want this project?',
+          'putPassUser': 'Put user password',
         }
       };
 }

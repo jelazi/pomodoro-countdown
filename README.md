@@ -1,6 +1,6 @@
 # Pomodoro Countdown
 
-Aplication for pomodoro technique (https://en.wikipedia.org/wiki/Pomodoro_Technique) in flutter. 
+Application for pomodoro technique (https://en.wikipedia.org/wiki/Pomodoro_Technique) in flutter. 
 
 ## Installation
 
